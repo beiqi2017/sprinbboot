@@ -26,7 +26,7 @@ public class HelloController {
     }
 
     @ApiOperation(value="获取图书列表", notes="获取图书列表")
-    @RequestMapping(value= "/books", method= RequestMethod.GET)
+    @RequestMapping(value= "/book", method= RequestMethod.GET)
     public List<User> mybatis() {
         return userService.find(); 
     }
