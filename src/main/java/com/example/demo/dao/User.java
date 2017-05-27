@@ -1,7 +1,14 @@
 package com.example.demo.dao;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class User {
 
+	@Id
+    @GeneratedValue
 	private String id;
 	private String name;
 	private String pwd;

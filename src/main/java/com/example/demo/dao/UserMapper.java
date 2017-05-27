@@ -1,12 +1,8 @@
 package com.example.demo.dao;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Mapper
-public interface UserMapper {
+public interface UserMapper extends JpaRepository<User,String> {
 
-	 @Select("select id, name as name, pwd as pwd from user")
-	  List<User> find();
+
 }
