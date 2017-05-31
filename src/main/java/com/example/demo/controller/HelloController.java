@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.dao.User;
+
+import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
 
 import io.swagger.annotations.ApiImplicitParam;

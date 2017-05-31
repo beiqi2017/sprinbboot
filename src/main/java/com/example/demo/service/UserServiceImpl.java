@@ -4,16 +4,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dao.User;
-import com.example.demo.dao.UserMapper;
+import com.example.demo.dao.UserDao;
+import com.example.demo.domain.User;
 
 @Service
 public class UserServiceImpl implements UserService{
 
 	@Autowired
-    private UserMapper userMapper;
+    private UserDao userMapper;
 	
 	 public List<User> find() {
-	        return userMapper.find();
+	        return userMapper.getUser();
 	    }
 }
