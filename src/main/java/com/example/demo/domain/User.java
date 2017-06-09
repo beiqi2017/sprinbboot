@@ -1,15 +1,19 @@
 package com.example.demo.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class User {
 
-	private String id;
+	private Integer uid;
 	private String name;
-	private String pwd;
-	public String getId() {
-		return id;
+	private String password;
+	private Set<Role> roles=new HashSet<Role>();
+	public Integer getUid() {
+		return uid;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setUid(Integer uid) {
+		this.uid = uid;
 	}
 	public String getName() {
 		return name;
@@ -17,11 +21,18 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getPwd() {
-		return pwd;
+	public String getPassword() {
+		return password;
 	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
+	public void setPassword(String password) {
+		this.password = password;
 	}
+	public Set<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+	
 	
 }
