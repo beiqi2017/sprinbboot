@@ -23,7 +23,7 @@ public class LoginController {
  	    token.setRememberMe(true);
         try {
         	subject.login(token);
-            User user=(User) subject.getPrincipal();
+            String user=(String) subject.getPrincipal();
             session.setAttribute("user", user);
             return "index";
         }catch (AuthenticationException e) {

@@ -4,7 +4,7 @@
 <mapper namespace="com.example.demo.dao.UserDao">
     <resultMap type="com.example.demo.domain.User" id="userMap">
         <id property="uid" column="uid"/>
-        <result property="username" column="username"/>
+        <result property="name" column="username"/>
         <result property="password" column="password"/>
         <collection property="roles" ofType="com.example.demo.domain.Role">
             <id property="rid" column="rid"/>
@@ -20,6 +20,6 @@
         inner join role r on r.rid=ur.rid
         inner join module_role mr on mr.rid=r.rid 
         inner join module m on mr.mid=m.mid 
-        WHERE username=#{username};
+        WHERE username=#{name};
     </select>
 </mapper>
