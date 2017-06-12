@@ -36,4 +36,9 @@ public class LoginController {
 //        session.removeAttribute("user");
         return "login";
     }
+    
+    @RequestMapping("/test")
+    public String test() {
+        return "test";
+    }
 }
