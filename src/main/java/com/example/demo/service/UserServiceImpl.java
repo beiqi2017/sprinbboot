@@ -14,6 +14,6 @@ public class UserServiceImpl implements UserService{
     private UserDao userMapper;
 	
 	 public User findUserByUserName(String name) {
-	        return userMapper.getUser();
+	        return userMapper.getUser(name);
 	    }
 }

@@ -8,6 +8,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -27,11 +28,19 @@ public class AuthRealm extends AuthorizingRealm{
     //认证.登录
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        UsernamePasswordToken utoken=(UsernamePasswordToken) token;//获取用户输入的token
-        String username = utoken.getUsername();
-        User user = userService.findUserByUserName(username);
-        return new SimpleAuthenticationInfo(user, user.getPassword(),this.getClass().getName());//放入shiro.调用CredentialsMatcher检验密码
-    }
+    	    
+    	    String username = (String) token.getPrincipal();
+    	    User user = userService.findUserByUserName(username);
+    	    if(user==null){
+    	      //木有找到用户
+    	      throw new UnknownAccountException("没有找到该账号");
+    	    }
+    	    /**
+    	     * 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以在此判断或自定义实现  
+    	     */
+    	    SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getName(), user.getPassword(),getName());
+    	    return info;
+    	  }
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {

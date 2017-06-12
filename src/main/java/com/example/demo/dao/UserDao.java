@@ -7,5 +7,5 @@ import com.example.demo.domain.User;
 @Mapper
 public interface UserDao {
 
-	  User getUser();
+	  User getUser(String username);
 }
