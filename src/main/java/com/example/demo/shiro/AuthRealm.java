@@ -44,7 +44,8 @@ public class AuthRealm extends AuthorizingRealm{
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-        User user=(User) principal.fromRealm(this.getClass().getName()).iterator().next();//获取session中的用户
+    	String username = (String)super.getAvailablePrincipal(principal); 
+    	User user = userService.findUserByUserName(username);
         List<String> permissions=new ArrayList<String>();
         Set<Role> roles = user.getRoles();
         if(roles.size()>0) {
