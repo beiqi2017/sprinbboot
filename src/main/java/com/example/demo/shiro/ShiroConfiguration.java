@@ -1,14 +1,18 @@
 package com.example.demo.shiro;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.example.demo.dao.AuthorityDao;
+import com.example.demo.domain.Authority;
 import org.apache.shiro.mgt.SecurityManager;
 
 /**
@@ -18,8 +22,10 @@ import org.apache.shiro.mgt.SecurityManager;
  */
 @Configuration
 public class ShiroConfiguration {
+	
+	
     @Bean(name="shiroFilter")
-    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager) {
+    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager,@Qualifier("authorityDao")AuthorityDao authorityDao) {
         ShiroFilterFactoryBean bean=new ShiroFilterFactoryBean();
         bean.setSecurityManager((org.apache.shiro.mgt.SecurityManager) manager);
         //配置登录的url和登录成功的url
@@ -28,7 +34,12 @@ public class ShiroConfiguration {
         bean.setUnauthorizedUrl("/login");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/jsp/login.jsp*", "anon"); //表示可以匿名访问
+        List<Authority> list=authorityDao.getAll();
+        for(int i=0;i<list.size();i++){
+        	Authority athority=list.get(i);
+        	filterChainDefinitionMap.put(athority.getResource(), athority.getPrem());
+        }
+        /*filterChainDefinitionMap.put("/jsp/login.jsp*", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/login", "anon"); 
         filterChainDefinitionMap.put("/loginUser", "anon"); 
         filterChainDefinitionMap.put("/logout*","anon");
@@ -36,7 +47,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/jsp/index.jsp*","authc");
         filterChainDefinitionMap.put("/*", "authc,perms[delete]");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**", "authc,perms[delete]");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/*.*", "authc,perms[delete]");
+        filterChainDefinitionMap.put("/*.*", "authc,perms[delete]");*/
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
