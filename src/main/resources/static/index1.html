@@ -5,7 +5,7 @@
 <!-- Meta, title, CSS, favicons, etc. -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>管理控制台</title>
 <!-- Bootstrap -->
 <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -27,16 +27,6 @@ html,body{height:100%}
 		$(".breadcrumb").html(info);
 	}
 	
-	$(function() {
-		   
-		
-		    var contentHeight= $(document.body).outerHeight(true)-$(".navbar").outerHeight();
-		    $(".col-md-9,.col-md-3").css("height",contentHeight+"px");
-		    $(".col-md-9,.col-md-3").css("max-height",contentHeight+"px");
-		    $(".tab-content").css("height",contentHeight-$(".nav-tabs").outerHeight()+"px");
-		    $(".tab-content").css("max-height",contentHeight-$(".nav-tabs").outerHeight()+"px");
-		
-	})
 	
 </script>
 <body>
@@ -66,7 +56,7 @@ html,body{height:100%}
 
 	<div class="ontainer-fluid">
 		<div class="row" style="margin:0px;">
-			<div class="col-md-3" style="padding:1px;border-right: 1px solid #ddd;overflow: auto;background-color:WhiteSmoke;">
+			<div class="col-md-3" style="padding:1px;">
 
 				<div class="panel-group" id="accordion" role="tablist"
 					aria-multiselectable="true">
@@ -150,29 +140,19 @@ html,body{height:100%}
 
 			</div>
 
-			<div  class="col-md-9" style="padding: 0px;">
-
-				<div>
-					<!-- Nav tabs -->
-					<ul class="nav nav-tabs" role="tablist">
-						<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">首页</a></li>
-					</ul>
-
-					<!-- Tab panes -->
-					<div class="tab-content" style="padding: 0px;overflow: auto;padding-left:4px;">
-						<div role="tabpanel" class="tab-pane active" id="home">
-
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-
-						</div>
-					</div>
+			<div class="col-md-9"  style="padding:0px;">
+				<ol class="breadcrumb" style="margin:0px">
+				    <li class="active"><span class="glyphicon glyphicon-home"></span></li>
+					<li class="active">Library</li>
+					<li class="active">Data</li>
+				</ol>
+				<div class="content" style="background-color:yellow;height:100%">
+				aa<br>
+				aa<br>
+				aa<br>
+				aa<br>
+				
 				</div>
-
 			</div>
 		</div>
 		<div>
