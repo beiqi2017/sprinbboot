@@ -28,15 +28,26 @@ public class ShiroConfiguration {
         bean.setUnauthorizedUrl("/login");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/jsp/login.jsp*", "anon"); //表示可以匿名访问
+        
+        filterChainDefinitionMap.put("/*", "anon");//表示需要认证才可以访问
+        filterChainDefinitionMap.put("/**", "anon");//表示需要认证才可以访问
+        filterChainDefinitionMap.put("/*.*", "anon");
+        
+        
+        /*filterChainDefinitionMap.put("/jsp/login.jsp*", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/login", "anon"); 
         filterChainDefinitionMap.put("/loginUser", "anon"); 
         filterChainDefinitionMap.put("/logout*","anon");
         filterChainDefinitionMap.put("/jsp/error.jsp*","anon");
         filterChainDefinitionMap.put("/jsp/index.jsp*","authc");
+        filterChainDefinitionMap.put("/druid.jsp", "anon"); 
+        filterChainDefinitionMap.put("/druid*", "anon"); 
+        filterChainDefinitionMap.put("/druid/*", "anon"); 
+        filterChainDefinitionMap.put("*.css", "anon"); 
+        filterChainDefinitionMap.put("*.js", "anon"); 
         filterChainDefinitionMap.put("/*", "authc,perms[delete]");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**", "authc,perms[delete]");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/*.*", "authc,perms[delete]");
+        filterChainDefinitionMap.put("/*.*", "authc,perms[delete]");*/
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }

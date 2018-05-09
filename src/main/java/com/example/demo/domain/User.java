@@ -1,10 +1,16 @@
 package com.example.demo.domain;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class User {
+public class User extends Base implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2919041135304623598L;
+	
 	private Integer uid;
 	private String name;
 	private String password;

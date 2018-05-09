@@ -13,29 +13,44 @@
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="./tabs.js"></script>
 </head>
 <style> 
 html,body{height:100%}        
 </style> 
 <script>
 	
-	function show(e){
+	function change(e) {
+		if ($(".col-md-3").is(":hidden")) {
+			$(".col-md-12").attr("class", "col-md-9");
+			$(e).attr("class", "glyphicon glyphicon-step-backward");
+		} else {
+			$(".col-md-9").attr("class", "col-md-12");
+			$(e).attr("class", "glyphicon glyphicon-step-forward");
+		}
 		$(".col-md-3").toggle();
-		var info='<li class="active"><span class="glyphicon glyphicon-home"></span></li>';
-		info=info+'<li class="active">'+$(e).parents(".collapse").prev(".panel-heading").find("a").html()+'</li>';
-		info=info+'<li class="active">'+$(e).html()+'</li>';
-		$(".breadcrumb").html(info);
 	}
+
+	
 	
 	$(function() {
-		   
+
+		function resize() {
+			var contentHeight = $(document.body).outerHeight(true) - $(".navbar").outerHeight(true);
+			$(".col-md-9,.col-md-3").css("height", contentHeight + "px");
+			$(".col-md-9,.col-md-3") .css("max-height", contentHeight + "px");
+			$("#home").css("height", contentHeight - $(".nav-tabs").outerHeight() + "px");
+			$("#home").css("max-height", contentHeight - $(".nav-tabs").outerHeight() + "px");
+		}
 		
-		    var contentHeight= $(document.body).outerHeight(true)-$(".navbar").outerHeight();
-		    $(".col-md-9,.col-md-3").css("height",contentHeight+"px");
-		    $(".col-md-9,.col-md-3").css("max-height",contentHeight+"px");
-		    $(".tab-content").css("height",contentHeight-$(".nav-tabs").outerHeight()+"px");
-		    $(".tab-content").css("max-height",contentHeight-$(".nav-tabs").outerHeight()+"px");
-		
+		 window.onresize=function(){
+			 resize();
+	     }
+		 
+		if(!navigator.userAgent.match(/mobile/i)) { 
+			resize();
+		}
+
 	})
 	
 </script>
@@ -81,12 +96,12 @@ html,body{height:100%}
 						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">
 								<ul class="nav nav-list" style="text-align:center">
-									<li><a href="#" style="padding:5px 10px" onclick="show(this)">首页</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
+									<li><a href="#" style="padding:5px 10px" onclick="addTab('test1','./new.html','tabTitle')">首页</a></li>
+									<li><a href="#" style="padding:5px 10px" onclick="addTab('test12','./query.html','tab12')">库</a></li>
+									<li><a href="#" style="padding:5px 10px" onclick="addTab('test13','./query.html','tab13')">应用</a></li>
+									<li><a href="#" style="padding:5px 10px" onclick="addTab('test14','./query.html','tab14')">资料</a></li>
+									<li><a href="#" style="padding:5px 10px" onclick="addTab('test15','./query.html','tab15')">设置</a></li>
+									<li><a href="#" style="padding:5px 10px" onclick="addTab('test16','./query.html','tab16')">库</a></li>
 									<li><a href="#" style="padding:5px 10px">应用</a></li>
 									<li><a href="#" style="padding:5px 10px">资料</a></li>
 									<li><a href="#" style="padding:5px 10px">设置</a></li>
@@ -117,7 +132,7 @@ html,body{height:100%}
 						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 							<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">
 								<ul class="nav nav-list" style="text-align:center">
-									<li><a href="#" style="padding:5px 10px" onclick="show(this)">首页</a></li>
+									<li><a href="#" style="padding:5px 10px" onclick="addTab('test10','./new.html','tab10')">首页</a></li>
 									<li><a href="#" style="padding:5px 10px">库</a></li>
 									<li><a href="#" style="padding:5px 10px">应用</a></li>
 									<li><a href="#" style="padding:5px 10px">资料</a></li>
@@ -137,7 +152,7 @@ html,body{height:100%}
 						<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 							<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">
 								<ul class="nav nav-list" style="text-align:center">
-									<li><a href="#" style="padding:5px 10px" onclick="show(this)">首页</a></li>
+									<li><a href="#" style="padding:5px 10px">首页</a></li>
 									<li><a href="#" style="padding:5px 10px">库</a></li>
 									<li><a href="#" style="padding:5px 10px">应用</a></li>
 									<li><a href="#" style="padding:5px 10px">资料</a></li>
@@ -154,13 +169,15 @@ html,body{height:100%}
 
 				<div>
 					<!-- Nav tabs -->
-					<ul class="nav nav-tabs" role="tablist">
-						<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">首页</a></li>
+					<ul class="nav nav-tabs" role="tablist" id="tablist">
+						<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+						<span class="glyphicon glyphicon-step-backward" id="show" onclick="change(this)"></span>&nbsp;首页
+						</a></li>
 					</ul>
 
 					<!-- Tab panes -->
-					<div class="tab-content" style="padding: 0px;overflow: auto;padding-left:4px;">
-						<div role="tabpanel" class="tab-pane active" id="home">
+					<div class="tab-content" style="padding: 0px;padding-left:4px;" id="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="home" style="padding: 0px;overflow: auto;">
 
 							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
 							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>

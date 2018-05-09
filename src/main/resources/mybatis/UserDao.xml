@@ -22,4 +22,18 @@
         inner join module m on mr.mid=m.mid 
         WHERE username=#{name};
     </select>
+    
+     <select id="list" parameterType="com.example.demo.domain.User" resultType="com.example.demo.domain.User">
+        SELECT u.* FROM user u 
+        <include refid="page" />  
+    </select>
+    
+      <select id="count" parameterType="com.example.demo.domain.User" resultType="int">
+		 select count(*) FROM user 
+    </select>
+    
+     <sql id="page">  
+        limit  #{start}, #{rows}
+    </sql> 
+    
 </mapper>
