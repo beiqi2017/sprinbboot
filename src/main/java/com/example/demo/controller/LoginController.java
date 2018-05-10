@@ -1,20 +1,28 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.example.demo.domain.User;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.alibaba.fastjson.JSONObject;
 
 @Controller
 public class LoginController {
+	
     @RequestMapping("/login")
-    public String login() {
-        return "login";
+    @ResponseBody
+    public Map<String,Boolean> login(@RequestBody JSONObject login) {
+    	HashMap<String,Boolean> map=new HashMap<String,Boolean>();
+		map.put("success",true);
+		return map;
     }
     @RequestMapping("/loginUser")
     public String loginUser(String username,String password,HttpSession session) {

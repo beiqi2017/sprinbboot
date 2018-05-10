@@ -1,197 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<!-- Meta, title, CSS, favicons, etc. -->
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>管理控制台</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
 <!-- Bootstrap -->
 <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="./tabs.js"></script>
+ <script src="./plugin/bootbox.min.js"></script>
+<style>
+	body{font-family:"微软雅黑"; font-size:14px;}
+	.wrap1{color:#fff;position:absolute; top:0; right:0; bottom:0; left:0; margin:auto }/*把整个屏幕真正撑开--而且能自己实现居中*/
+	.main_content{background-color:rgba(66, 123, 169, 0.75); margin-left:auto; margin-right:auto; text-align:left; float:none; border-radius:8px;}
+	.icon_font{position:absolute; bottom:15px; left:10px; font-size:18px; color:#3872f6;}
+	.font16{font-size:16px;}
+	.mg-t20{margin-top:20px;}
+	@media (min-width:200px){.pd-xs-20{padding:20px;}}
+	@media (min-width:768px){.pd-sm-50{padding:50px;}}
+
+</style>
+
 </head>
-<style> 
-html,body{height:100%}        
-</style> 
-<script>
-	
-	function change(e) {
-		if ($(".col-md-3").is(":hidden")) {
-			$(".col-md-12").attr("class", "col-md-9");
-			$(e).attr("class", "glyphicon glyphicon-step-backward");
-		} else {
-			$(".col-md-9").attr("class", "col-md-12");
-			$(e).attr("class", "glyphicon glyphicon-step-forward");
+
+<script type="text/javascript"> 
+
+    function changeImg() { 
+        var imgSrc = $("#imgObj"); 
+        var src = imgSrc.attr("src"); 
+        imgSrc.attr("src", chgUrl(src)); 
+    } 
+    
+    //时间戳     
+    //为了使每次生成图片不一致，即不让浏览器读缓存，所以需要加上时间戳     
+    function chgUrl(url) { 
+        var timestamp = (new Date()).valueOf(); 
+        url = url.substring(0,9); 
+        if ((url.indexOf("&") >= 0)) { 
+            url = url + "×tamp=" + timestamp; 
+        } else { 
+            url = url + "?timestamp=" + timestamp; 
+        } 
+        return url; 
+    } 
+    
+ 
+	function loginSubmit() {
+		if (validateLoginForm()) {
+			var login= new Object();
+			login.username=$("#username").val().trim();
+			login.password = $("#password").val().trim();
+			login.code = $("#code").val().trim();
+		    $.ajax({
+		        type: "POST",
+		        url: "./login",
+		        dataType: "json",
+		        contentType:"application/json",
+		        data:JSON.stringify(login),
+		        async : false,
+		        success: function(data){
+					if (data.success) {
+						 window.location.href="./home.html";
+					} else {
+						bootbox.alert("登录信息有误！")
+					}
+		           }
+		     });
+			
+			
+			
 		}
-		$(".col-md-3").toggle();
 	}
 
-	
-	
-	$(function() {
-
-		function resize() {
-			var contentHeight = $(document.body).outerHeight(true) - $(".navbar").outerHeight(true);
-			$(".col-md-9,.col-md-3").css("height", contentHeight + "px");
-			$(".col-md-9,.col-md-3") .css("max-height", contentHeight + "px");
-			$("#home").css("height", contentHeight - $(".nav-tabs").outerHeight() + "px");
-			$("#home").css("max-height", contentHeight - $(".nav-tabs").outerHeight() + "px");
+	function validateLoginForm() {
+		var username = $("#username").val();
+		if (!username) {
+			bootbox.alert("登录名不能为空");
+			return false;
 		}
-		
-		 window.onresize=function(){
-			// resize();
-	     }
-		 
-		if(!navigator.userAgent.match(/mobile/i)) { 
-			resize();
+		var password = $("#password").val();
+		if (!password) {
+			bootbox.alert("密码不能为空");
+			return false;
 		}
-
-	})
-	
-</script>
+		var code = $("#code").val();
+		if (!code) {
+			bootbox.alert("验证码不能为空");
+			return false;
+		}
+		return true;
+	}
+</script> 
 <body>
-
-	<nav class="navbar navbar-inverse" style="margin-bottom: 0px;">
-		<div class="container-fluid">
-			<H4 class="navbar-text" style="font-family: 'Microsoft YaHei' ! important;font-weight:bold;">
-			     营运管理系统
-			</H4>
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
-						<span class="glyphicon glyphicon-user"></span>
-						  用户
-                        <span class="caret"></span>
-					</a>
-						<ul class="dropdown-menu">
-							<li><a href="#"><span class="glyphicon glyphicon-edit"></span>&nbsp;修改密码</a></li>
-							<li role="separator" class="divider"></li>
-							<li><a href="#"><span class="glyphicon glyphicon-log-out"></span>&nbsp;退出</a></li>
-						</ul></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-	<div class="ontainer-fluid">
-		<div class="row" style="margin:0px;">
-			<div class="col-md-3" style="padding:1px;border-right: 1px solid #ddd;overflow: auto;background-color:WhiteSmoke;">
-
-				<div class="panel-group" id="accordion" role="tablist"
-					aria-multiselectable="true">
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingOne">
-							<h4 class="panel-title" style="text-align:center">
-								<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"aria-controls="collapseOne"> 
-								   Item#1
-								 </a>
-							</h4>
-						</div>
-						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-							<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">
-								<ul class="nav nav-list" style="text-align:center">
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test1','./new.html','tabTitle')">首页</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test12','./query.html','tab12')">库</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test13','./query.html','tab13')">应用</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test14','./query.html','tab14')">资料</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test15','./query.html','tab15')">设置</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test16','./query.html','tab16')">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingTwo">
-							<h4 class="panel-title" style="text-align:center">
-								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-									Item#2 
-								</a>
-							</h4>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-							<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">
-								<ul class="nav nav-list" style="text-align:center">
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test10','./new.html','tab10')">首页</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingThree">
-							<h4 class="panel-title" style="text-align:center">
-								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-									Item#3 
-								</a>
-							</h4>
-						</div>
-						<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-							<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">
-								<ul class="nav nav-list" style="text-align:center">
-									<li><a href="#" style="padding:5px 10px">首页</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-			<div  class="col-md-9" style="padding: 0px;">
-
-				<div>
-					<!-- Nav tabs -->
-					<ul class="nav nav-tabs" role="tablist" id="tablist">
-						<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-						<span class="glyphicon glyphicon-step-backward" id="show" onclick="change(this)"></span>&nbsp;首页
-						</a></li>
-					</ul>
-
-					<!-- Tab panes -->
-					<div class="tab-content" style="padding: 0px;padding-left:4px;" id="tab-content">
-						<div role="tabpanel" class="tab-pane active" id="home" style="padding: 0px;overflow: auto;">
-
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-		<div>
+    
+    <div class="container wrap1" style="height:350px;">
+            
+            <div class="col-sm-8 col-md-5 center-auto pd-sm-50 pd-xs-20 main_content">
+                <p class="text-center font16">用户登录</p>
+                <form>
+                    <div class="input-group mg-t20">
+                      <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                      <input type="text" class="form-control" id="username" placeholder="请输入用户名">
+                    </div>
+                    <div class="input-group mg-t20">
+                      <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+                      <input type="password" class="form-control" id="password" placeholder="请输入密码">
+                    </div>
+                    <div class="input-group mg-t20">
+                      <div class="input-group-addon"><span class="glyphicon glyphicon-picture"></span></div>
+                      <input type="text" class="form-control" id="code" placeholder="请输入验证码">
+                      <div class="input-group-addon" style="padding:0px"><img id="imgObj" src="./code.do" height="31px" onclick="changeImg()" title="点击刷新" style="vertical-align: middle;"/></div>
+                    </div>
+                    <div class="input-group mg-t20"></div>
+                    <div class="control-group" style="text-align:center;">
+                      <button type="button" class="btn btn-success" style="margin-right:10px;" onclick="loginSubmit()">登 录</button>
+                      <button type="button" class="btn btn-info" style="margin-left:10px;">重 置</button>
+                    </div>
+               </form>
+        </div><!--row end-->
+    </div><!--container end-->
+     
 </body>
 </html>
