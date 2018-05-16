@@ -24,7 +24,11 @@ public class UserServiceImpl implements UserService{
 	
 	 public User findUserByUserName(String name) {
 	        return userMapper.getUser(name);
-	    }
+	 }
+	 
+	 public void update(User user) {
+	     userMapper.update(user);
+	 }
 	 
 	 public Map<String,Object>  list(String params) {
 		    JSONObject jsonObject = JSONObject.parseObject(params);

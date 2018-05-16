@@ -7,15 +7,20 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.domain.User;
+import com.example.demo.service.UserService;
 
 @Controller
 public class LoginController {
 	
+	@Autowired
+    private UserService userService;
    
 	@RequestMapping("/login")
     public String login(){
@@ -25,11 +30,10 @@ public class LoginController {
     @RequestMapping("/loginUser")
     @ResponseBody
     public Map<String,Object> loginUser(@RequestBody JSONObject login,HttpSession session) {
+    	HashMap<String,Object> map=new HashMap<String,Object>();
     	String username=login.getString("username");
         String password=login.getString("password");
         String code=login.getString("code");
-    	HashMap<String,Object> map=new HashMap<String,Object>();
-		map.put("success",false);
 		if(!code.equalsIgnoreCase((String) session.getAttribute("code"))) {
 			map.put("msg","验证码错误");
 			return map;
@@ -39,11 +43,12 @@ public class LoginController {
  	    token.setRememberMe(true);
         try {
         	subject.login(token);
-            /*String user=(String) subject.getPrincipal();
-            session.setAttribute("user", user);*/
+            String user=(String) subject.getPrincipal();
+            session.setAttribute("user", user);
         	map.put("success",true);
             return map;
         }catch (AuthenticationException e) {
+    	  map.put("success",false);
   	      token.clear();
   	      String msg = "";
              if (e instanceof org.apache.shiro.authc.ConcurrentAccessException) {
@@ -64,8 +69,32 @@ public class LoginController {
     public String logOut(HttpSession session) {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-//        session.removeAttribute("user");
-        return "login";
+        session.removeAttribute("user");
+        return "index";
+    }
+    
+    
+    @RequestMapping("/upPassword")
+    @ResponseBody
+    public Map<String,Object> upPassword(@RequestBody JSONObject login,HttpSession session) {
+    	HashMap<String,Object> map=new HashMap<String,Object>();
+		try {
+			String password = login.getString("password");
+			String password1 = login.getString("password1");
+			String username=(String) session.getAttribute("user");
+			User user=userService.findUserByUserName(username);
+			if(!password.equals(user.getPassword())) {
+				map.put("msg", "原密码不正确");
+				map.put("success",false);
+			}else {
+				user.setPassword(password1);
+				userService.update(user);
+				map.put("success", true);
+			}
+		} catch (Exception e) {
+			map.put("success",false);
+		}
+		return map;
     }
     
   

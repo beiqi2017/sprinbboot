@@ -12,4 +12,6 @@ public interface UserDao {
 	  List<User> list(User user);
 	  
 	  int count(User user);
+	  
+	  void update(User user);
 }

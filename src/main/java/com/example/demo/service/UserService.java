@@ -15,4 +15,6 @@ public interface UserService {
 	
 	List<Module> getMenu();
 	
+	public void update(User user);
+	
 }
