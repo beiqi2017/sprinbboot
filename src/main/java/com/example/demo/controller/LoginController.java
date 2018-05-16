@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -11,7 +10,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 
@@ -19,6 +17,11 @@ import com.alibaba.fastjson.JSONObject;
 public class LoginController {
 	
    
+	@RequestMapping("/login")
+    public String login(){
+        return "index";
+    }
+	
     @RequestMapping("/loginUser")
     @ResponseBody
     public Map<String,Object> loginUser(@RequestBody JSONObject login,HttpSession session) {
