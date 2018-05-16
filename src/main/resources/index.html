@@ -54,7 +54,7 @@
 			login.code = $("#code").val().trim();
 		    $.ajax({
 		        type: "POST",
-		        url: "./loginUser",
+		        url: "./login",
 		        dataType: "json",
 		        contentType:"application/json",
 		        data:JSON.stringify(login),
@@ -63,7 +63,7 @@
 					if (data.success) {
 						 window.location.href="./home.html";
 					} else {
-						bootbox.alert(data.msg)
+						bootbox.alert("登录信息有误！")
 					}
 		           }
 		     });

@@ -12,7 +12,7 @@ public class User extends Base implements Serializable{
 	private static final long serialVersionUID = 2919041135304623598L;
 	
 	private Integer uid;
-	private String name;
+	private String username;
 	private String password;
 	private Set<Role> roles=new HashSet<Role>();
 	public Integer getUid() {
@@ -21,11 +21,12 @@ public class User extends Base implements Serializable{
 	public void setUid(Integer uid) {
 		this.uid = uid;
 	}
-	public String getName() {
-		return name;
+	
+	public String getUsername() {
+		return username;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public String getPassword() {
 		return password;

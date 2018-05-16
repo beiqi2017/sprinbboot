@@ -1,14 +1,21 @@
 package com.example.demo.shiro;
 
 import java.util.LinkedHashMap;
+import java.util.List;
+
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.example.demo.dao.ModuleDao;
+import com.example.demo.domain.Module;
+import com.example.demo.service.UserService;
+
 import org.apache.shiro.mgt.SecurityManager;
 
 /**
@@ -18,36 +25,30 @@ import org.apache.shiro.mgt.SecurityManager;
  */
 @Configuration
 public class ShiroConfiguration {
+	
+	
+	
     @Bean(name="shiroFilter")
-    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager) {
+    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager,@Qualifier("moduleDao") ModuleDao moduleDao) {
         ShiroFilterFactoryBean bean=new ShiroFilterFactoryBean();
         bean.setSecurityManager((org.apache.shiro.mgt.SecurityManager) manager);
         //配置登录的url和登录成功的url
         bean.setLoginUrl("/login");
-        bean.setSuccessUrl("/home");
+        bean.setSuccessUrl("/home.html");
         bean.setUnauthorizedUrl("/login");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
         
-        filterChainDefinitionMap.put("/*", "anon");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/**", "anon");//表示需要认证才可以访问
+        
+        List<Module> result=moduleDao.menu("perm");
+        for(Module module:result){
+             filterChainDefinitionMap.put(module.getUrl(),module.getMname());
+        }
+        filterChainDefinitionMap.put("/home.html", "authc");
+        filterChainDefinitionMap.put("/*", "anon");
+        filterChainDefinitionMap.put("/**", "anon");
         filterChainDefinitionMap.put("/*.*", "anon");
         
-        
-        /*filterChainDefinitionMap.put("/jsp/login.jsp*", "anon"); //表示可以匿名访问
-        filterChainDefinitionMap.put("/login", "anon"); 
-        filterChainDefinitionMap.put("/loginUser", "anon"); 
-        filterChainDefinitionMap.put("/logout*","anon");
-        filterChainDefinitionMap.put("/jsp/error.jsp*","anon");
-        filterChainDefinitionMap.put("/jsp/index.jsp*","authc");
-        filterChainDefinitionMap.put("/druid.jsp", "anon"); 
-        filterChainDefinitionMap.put("/druid*", "anon"); 
-        filterChainDefinitionMap.put("/druid/*", "anon"); 
-        filterChainDefinitionMap.put("*.css", "anon"); 
-        filterChainDefinitionMap.put("*.js", "anon"); 
-        filterChainDefinitionMap.put("/*", "authc,perms[delete]");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/**", "authc,perms[delete]");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/*.*", "authc,perms[delete]");*/
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }

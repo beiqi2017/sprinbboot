@@ -51,7 +51,41 @@ html,body{height:100%}
 		if(!navigator.userAgent.match(/mobile/i)) { 
 			resize();
 		}
+		
+		
+		$.ajax({
+	        type: "get",
+	        url: "./user/menu",
+	        dataType: "json",
+	        success: function (result) {
+	          $.each(result, function (index, obj) {
+                 
+	            var html='<div class="panel panel-default">'+
+				 '<div class="panel-heading" role="tab" id="heading'+index+'">'+
+					'<h4 class="panel-title" style="text-align:center">'+
+						'<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'+index+'" aria-expanded="true" aria-controls="collapse'+index+'">'+ 
+						 obj.menu +
+						 '</a>'+
+					'</h4>'+
+				'</div>'+
+				'<div id="collapse'+index+'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'+index+'">'+
+					'<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">'+
+						'<ul class="nav nav-list" style="text-align:center">';
+						 $.each(obj.modules, function (index1, obj1) {
+							 html=html+'<li><a href="#" style="padding:5px 10px" onclick="addTab(\''+index+index1+'\',\''+obj1.url+'\',\''+obj1.menu+'\')">'+obj1.menu+'</a></li>';
+						 })
 
+						  html=html+'</ul></div></div></div>'
+	        	          $("#accordion").append(html);
+	        	
+	        	 });
+	        	
+	        },
+	        error: function () {
+	        	console.log("树形结构加载失败！")
+	        }
+	    });
+		
 	})
 	
 </script>
@@ -84,84 +118,8 @@ html,body{height:100%}
 		<div class="row" style="margin:0px;">
 			<div class="col-md-3" style="padding:1px;border-right: 1px solid #ddd;overflow: auto;background-color:WhiteSmoke;">
 
-				<div class="panel-group" id="accordion" role="tablist"
-					aria-multiselectable="true">
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingOne">
-							<h4 class="panel-title" style="text-align:center">
-								<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"aria-controls="collapseOne"> 
-								   Item#1
-								 </a>
-							</h4>
-						</div>
-						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-							<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">
-								<ul class="nav nav-list" style="text-align:center">
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test1','./new.html','tabTitle')">首页</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test12','./query.html','tab12')">库</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test13','./query.html','tab13')">应用</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test14','./query.html','tab14')">资料</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test15','./query.html','tab15')">设置</a></li>
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test16','./query.html','tab16')">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingTwo">
-							<h4 class="panel-title" style="text-align:center">
-								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-									Item#2 
-								</a>
-							</h4>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-							<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">
-								<ul class="nav nav-list" style="text-align:center">
-									<li><a href="#" style="padding:5px 10px" onclick="addTab('test10','./new.html','tab10')">首页</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingThree">
-							<h4 class="panel-title" style="text-align:center">
-								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-									Item#3 
-								</a>
-							</h4>
-						</div>
-						<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-							<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">
-								<ul class="nav nav-list" style="text-align:center">
-									<li><a href="#" style="padding:5px 10px">首页</a></li>
-									<li><a href="#" style="padding:5px 10px">库</a></li>
-									<li><a href="#" style="padding:5px 10px">应用</a></li>
-									<li><a href="#" style="padding:5px 10px">资料</a></li>
-									<li><a href="#" style="padding:5px 10px">设置</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
+				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+					
 				</div>
 
 			</div>

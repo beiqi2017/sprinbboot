@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="./plugin/bootstrap-treeview.min.css" rel="stylesheet" />
+<!-- Bootstrap -->
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="./plugin/bootstrap-treeview.min.js"></script>    
+</head>
+<style> 
+
+.modal-dialog { 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    left: 0; 
+    right: 0; 
+} 
+
+.modal-content { 
+    /*overflow-y: scroll; */ 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+} 
+
+.modal-body { 
+    overflow-y: scroll; 
+    position: absolute; 
+    top: 55px; 
+    bottom: 65px; 
+    width: 100%; 
+} 
+
+.modal-header .close {margin-right: 15px;} 
+
+.modal-footer {
+    position: absolute; 
+    width: 100%; 
+    bottom: 0; 
+}      
+</style> 
+
+<script type="text/javascript">
+function getChildNodeIdArr(node) {
+    var ts = [];
+    if (node.nodes) {
+        for (x in node.nodes) {
+            ts.push(node.nodes[x].nodeId);
+            if (node.nodes[x].nodes) {
+                var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                for (j in getNodeDieDai) {
+                    ts.push(getNodeDieDai[j]);
+                }
+            }
+        }
+    } else {
+        ts.push(node.nodeId);
+    }
+    return ts;
+}
+
+function setParentNodeCheck(node) {
+    var parentNode = $("#tree").treeview("getNode", node.parentId);
+    if (parentNode.nodes) {
+        var checkedCount = 0;
+        for (x in parentNode.nodes) {
+            if (parentNode.nodes[x].state.checked) {
+                checkedCount ++;
+            } else {
+                break;
+            }
+        }
+        if (checkedCount === parentNode.nodes.length) {
+            $("#tree").treeview("checkNode", parentNode.nodeId);
+            setParentNodeCheck(parentNode);
+        }else{
+        	/* if(typeof(parentNode.parentId)!=undefined){
+        	  $("#tree").treeview("uncheckNode", parentNode.nodeId);
+        	} */
+        }
+    }
+}
+
+$(function () {
+    $.ajax({
+        type: "get",
+        url: "./user/getTree",
+        dataType: "json",
+        success: function (result) {
+            $('#tree').treeview({
+                data: result,         // 数据源
+                showCheckbox: true,   //是否显示复选框
+                onNodeChecked: function (event,node) {
+                    var selectNodes = getChildNodeIdArr(node); //获取所有子节点
+                    if (selectNodes) { //子节点不为空，则选中所有子节点
+                           $('#tree').treeview('checkNode', [selectNodes, { silent: true }]);
+                    }
+                    setParentNodeCheck(node);
+                },
+                onNodeUnchecked: function (event, node) {
+                	var selectNodes = getChildNodeIdArr(node); //获取所有子节点
+                	if (selectNodes) { //子节点不为空，则取消选中所有子节点
+                	  $('#tree').treeview('uncheckNode', [selectNodes, { silent: true }]);
+                	}
+                	setParentNodeCheck(node);
+                }
+            });
+        },
+        error: function () {
+        	console.log("树形结构加载失败！")
+        }
+    });
+})
+
+
+
+</script>
+  
+<body>
+
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">开始演示模态框</button>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">权限控制</h4>
+            </div>
+            <div class="modal-body"><div id="tree"></div></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+</body>
+</html>

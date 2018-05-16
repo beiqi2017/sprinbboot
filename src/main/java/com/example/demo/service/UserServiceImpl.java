@@ -1,12 +1,15 @@
 package com.example.demo.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.dao.ModuleDao;
 import com.example.demo.dao.UserDao;
+import com.example.demo.domain.Module;
 import com.example.demo.domain.User;
 
 @Service
@@ -14,6 +17,10 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
     private UserDao userMapper;
+	
+
+	@Autowired
+    private ModuleDao  moduleDao;
 	
 	 public User findUserByUserName(String name) {
 	        return userMapper.getUser(name);
@@ -36,4 +43,17 @@ public class UserServiceImpl implements UserService{
 			map.put("total",userMapper.count(u));
 			return map;
 		}
+
+	@Override
+	public List<Module> getMenu() {
+		// TODO Auto-generated method stub
+		List<Module> result= moduleDao.menu("menu");
+		for(int i=0;i<result.size();i++) {
+			Module module=result.get(i);
+			List<Module> result1= moduleDao.subMenu(module.getMid());
+		    module.setModules(result1);
+		}
+		return result;
+	}
+	 
 }

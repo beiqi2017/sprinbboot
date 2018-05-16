@@ -11,44 +11,49 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 
 @Controller
 public class LoginController {
 	
-    @RequestMapping("/login")
-    @ResponseBody
-    public Map<String,Boolean> login(@RequestBody JSONObject login) {
-    	HashMap<String,Boolean> map=new HashMap<String,Boolean>();
-		map.put("success",true);
-		return map;
-    }
+   
     @RequestMapping("/loginUser")
-    public String loginUser(String username,String password,HttpSession session) {
-    	 Subject subject = SecurityUtils.getSubject();
+    @ResponseBody
+    public Map<String,Object> loginUser(@RequestBody JSONObject login,HttpSession session) {
+    	String username=login.getString("username");
+        String password=login.getString("password");
+        String code=login.getString("code");
+    	HashMap<String,Object> map=new HashMap<String,Object>();
+		map.put("success",false);
+		if(!code.equalsIgnoreCase((String) session.getAttribute("code"))) {
+			map.put("msg","验证码错误");
+			return map;
+		}
+    	Subject subject = SecurityUtils.getSubject();
  	    UsernamePasswordToken token = new UsernamePasswordToken(username,password);
  	    token.setRememberMe(true);
         try {
         	subject.login(token);
             /*String user=(String) subject.getPrincipal();
             session.setAttribute("user", user);*/
-            return "index";
+        	map.put("success",true);
+            return map;
         }catch (AuthenticationException e) {
   	      token.clear();
-  	      e.printStackTrace();
   	      String msg = "";
              if (e instanceof org.apache.shiro.authc.ConcurrentAccessException) {
                   msg = "用户已登录！";
-               } else if (e instanceof org.apache.shiro.authc.AccountException) {
-                  msg = "未知帐号错误或用户状态异常！";
+              } else if (e instanceof org.apache.shiro.authc.AccountException) {
+                  msg = "用户名错误！";
               } else if (e instanceof org.apache.shiro.authc.IncorrectCredentialsException) {
-                  msg = "用户名密码错误！";
-               } else if (e instanceof org.apache.shiro.authc.AuthenticationException) {
+                  msg = "密码错误！";
+              } else if (e instanceof org.apache.shiro.authc.AuthenticationException) {
                   msg = "认证失败！";
-               }
-              System.out.println(msg);
-  	          return "login";
+              }
+             map.put("msg",msg);
+  	         return map;
   	    } 
         
     }
@@ -60,8 +65,5 @@ public class LoginController {
         return "login";
     }
     
-    @RequestMapping("/test")
-    public String test() {
-        return "test";
-    }
+  
 }
