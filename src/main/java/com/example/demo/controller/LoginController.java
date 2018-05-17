@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.SessionException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,8 +69,16 @@ public class LoginController {
     @RequestMapping("/logOut")
     public String logOut(HttpSession session) {
         Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-        session.removeAttribute("user");
+        if (subject.isAuthenticated()) {  
+        	try {
+        		session.removeAttribute("user");
+                subject.logout();
+            } catch (SessionException ise) {
+               ise.printStackTrace();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }  
         return "index";
     }
     
