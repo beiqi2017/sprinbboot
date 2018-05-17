@@ -32,6 +32,11 @@
         <include refid="page" />  
     </select>
     
+    
+    <select id="findByPage" parameterType="com.example.demo.domain.User" resultType="com.example.demo.domain.User">
+        SELECT u.* FROM user u 
+    </select>
+    
       <select id="count" parameterType="com.example.demo.domain.User" resultType="int">
 		 select count(*) FROM user 
     </select>

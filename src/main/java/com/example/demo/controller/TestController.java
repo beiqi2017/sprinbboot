@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.Module;
+import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 
 @Controller 
 @RequestMapping(value = "/user", produces = "application/json;charset=UTF-8")
@@ -26,6 +29,16 @@ public class TestController {
 	public Map<String,Object> menuList(@RequestParam("params") String params) {
 		return userService.list(params);
 	}
+	
+	@RequestMapping(value = "/page1", method = RequestMethod.GET)
+	@ResponseBody
+	public PageInfo<User> testFindByPage() {
+		Page<User> persons = userService.findByPage(1, 2);
+		// 需要把Page包装成PageInfo对象才能序列化。该插件也默认实现了一个PageInfo
+		PageInfo<User> pageInfo = new PageInfo<>(persons);
+		return pageInfo;
+	}
+
 	
 	@RequestMapping(value = "/getTree", method = RequestMethod.GET)
 	@ResponseBody

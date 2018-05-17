@@ -11,6 +11,8 @@ import com.example.demo.dao.ModuleDao;
 import com.example.demo.dao.UserDao;
 import com.example.demo.domain.Module;
 import com.example.demo.domain.User;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -59,5 +61,12 @@ public class UserServiceImpl implements UserService{
 		}
 		return result;
 	}
+	
+	
+	@Override
+    public Page<User> findByPage(int pageNo, int pageSize) {
+        PageHelper.startPage(pageNo, pageSize);
+        return userMapper.findByPage();
+    }
 	 
 }
