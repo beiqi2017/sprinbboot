@@ -18,9 +18,9 @@ import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService{
 
 	@Autowired
@@ -142,7 +142,6 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 
-	@Override
 	@Transactional
 	public void updateTree(JSONObject parm) {
 		Integer rid=parm.getInteger("rid");

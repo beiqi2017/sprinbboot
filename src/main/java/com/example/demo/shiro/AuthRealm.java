@@ -15,6 +15,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 import com.example.demo.domain.Module;
 import com.example.demo.domain.Role;
@@ -22,7 +23,9 @@ import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
 
 public class AuthRealm extends AuthorizingRealm{
-    @Autowired
+	
+    @Lazy
+	@Autowired
     private UserService userService;
     
     //认证.登录
