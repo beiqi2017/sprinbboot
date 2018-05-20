@@ -14,6 +14,7 @@ public class User extends Base implements Serializable{
 	private Integer uid;
 	private String username;
 	private String password;
+	private String rname;
 	private Set<Role> roles=new HashSet<Role>();
 	public Integer getUid() {
 		return uid;
@@ -39,6 +40,12 @@ public class User extends Base implements Serializable{
 	}
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+	public String getRname() {
+		return rname;
+	}
+	public void setRname(String rname) {
+		this.rname = rname;
 	}
 	
 	

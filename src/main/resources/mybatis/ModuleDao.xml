@@ -10,8 +10,26 @@
      </select>
     
     
-     <select id="subMenu" parameterType="int"   resultType="com.example.demo.domain.Module">
-        SELECT m1.* FROM module m1 WHERE  m1.pid =#{mid}
+     <select id="subMenu"    resultType="com.example.demo.domain.Module">
+        SELECT m1.* FROM module m1 WHERE  m1.pid =#{pid} and 
+        
+        EXISTS (select 1 from (select mr.mid  from user_role ur,module_role mr where ur.rid=mr.rid and ur.uid=#{uid}) md
+        
+                 where  md.mid=m1.mid)
     </select>
+    
+    
+    <select id="module"  resultType="com.example.demo.domain.Right">
+    
+         SELECT m.menu,m.mid,md.rid as has  FROM module m left join (SELECT mr.*  from module_role mr WHERE mr.rid=#{rid}) md 
+ 
+ 
+         ON m.mid=md.mid  where m.level=#{level} 
+        
+        <if test="pid !=null">
+		 	and m.pid=#{pid}
+		</if>
+		 
+     </select>
     
 </mapper>

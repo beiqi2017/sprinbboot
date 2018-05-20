@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.RoleDao">
+    
+    <select id="findByPage" parameterType="com.example.demo.domain.Role" resultType="com.example.demo.domain.Role">
+        SELECT r.* FROM role r 
+    </select>
+    
+     <delete id="delete" parameterType="int">  
+        delete from module_role  where rid = #{rid}  
+    </delete>
+    
+    <insert id="insert" parameterType="java.util.ArrayList">
+	     insert into module_role(rid,mid)  VALUES
+        <foreach collection ="list" item="right" separator =",">
+         (#{right.rid}, #{right.mid})
+        </foreach >
+	 </insert>
+	 
+</mapper>

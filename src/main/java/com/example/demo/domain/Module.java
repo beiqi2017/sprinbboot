@@ -12,6 +12,7 @@ public class Module {
 	private String type;
 	private String menu;
 	private Integer pid;
+	private Integer level;
 	private Set<Role> roles;
 	private List<Module> modules=new ArrayList<Module>();
 	
@@ -62,6 +63,12 @@ public class Module {
 	}
 	public void setModules(List<Module> modules) {
 		this.modules = modules;
+	}
+	public Integer getLevel() {
+		return level;
+	}
+	public void setLevel(Integer level) {
+		this.level = level;
 	}
 	
 	

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Bootstrap -->
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="./plugin/bootstrap-treeview.min.css" rel="stylesheet" />
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- 引入bootstrap-table样式 -->
+<link href="./plugin/bootstrap-table.min.css" rel="stylesheet">
+<!-- bootstrap-table.min.js -->
+<script src="./plugin/bootstrap-table.min.js"></script>
+<!-- 引入中文语言包 -->
+<script src="./plugin/bootstrap-table-zh-CN.js"></script>
+<script src="./plugin/bootstrap-treeview.min.js"></script> 
+
+</head>
+<style> 
+
+.modal-dialog { 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    left: 0; 
+    right: 0; 
+} 
+
+.modal-content { 
+    /*overflow-y: scroll; */ 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+} 
+
+.modal-body { 
+    overflow-y: scroll; 
+    position: absolute; 
+    top: 55px; 
+    bottom: 65px; 
+    width: 100%; 
+} 
+
+.modal-header .close {margin-right: 15px;} 
+
+.modal-footer {
+    position: absolute; 
+    width: 100%; 
+    bottom: 0; 
+}      
+</style> 
+
+<script type="text/javascript">
+var url=document.location.href;
+var domainUrl=url.substring(0,url.indexOf("business"));
+
+var iframe = "";
+var params = location.search.substr(1); // 获取参数 平且去掉?
+var ArrParam = params.split('&');
+if (ArrParam.length == 1) {
+iframe= params.split('=')[1];
+};
+
+var rid;
+function getChildNodeIdArr(node) {
+    var ts = [];
+    if (node.nodes) {
+        for (x in node.nodes) {
+            ts.push(node.nodes[x].nodeId);
+            if (node.nodes[x].nodes) {
+                var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                for (j in getNodeDieDai) {
+                    ts.push(getNodeDieDai[j]);
+                }
+            }
+        }
+    } else {
+        ts.push(node.nodeId);
+    }
+    return ts;
+}
+
+function setParentNodeCheck(node) {
+    var parentNode = $("#tree").treeview("getNode", node.parentId);
+    if (parentNode.nodes) {
+        var checkedCount = 0;
+        for (x in parentNode.nodes) {
+            if (parentNode.nodes[x].state.checked) {
+                checkedCount ++;
+            } else {
+                break;
+            }
+        }
+        if (checkedCount === parentNode.nodes.length) {
+            $("#tree").treeview("checkNode", parentNode.nodeId);
+            setParentNodeCheck(parentNode);
+        }else{
+        	/* if(typeof(parentNode.parentId)!=undefined){
+        	  $("#tree").treeview("uncheckNode", parentNode.nodeId);
+        	} */
+        }
+    }
+}
+
+function edit(roleId) {
+	rid=roleId
+	$.ajax({
+        type: "get",
+        url: "./user/getTree?rid="+roleId,
+        dataType: "json",
+        success: function (result) {
+            $('#tree').treeview({
+                data: result,         // 数据源
+                showCheckbox: true,   //是否显示复选框
+                onNodeChecked: function (event,node) {
+                    var selectNodes = getChildNodeIdArr(node); //获取所有子节点
+                    if (selectNodes) { //子节点不为空，则选中所有子节点
+                           $('#tree').treeview('checkNode', [selectNodes, { silent: true }]);
+                    }
+                    setParentNodeCheck(node);
+                },
+                onNodeUnchecked: function (event, node) {
+                	var selectNodes = getChildNodeIdArr(node); //获取所有子节点
+                	if (selectNodes) { //子节点不为空，则取消选中所有子节点
+                	  $('#tree').treeview('uncheckNode', [selectNodes, { silent: true }]);
+                	}
+                	setParentNodeCheck(node);
+                }
+            });
+        },
+        error: function () {
+        	console.log("树形结构加载失败！")
+        }
+    });
+};
+
+
+
+$(function() {
+	
+	$("#btn").click(function (e) {
+	    var arr = $('#tree').treeview('getChecked');
+	    var parms = new Array();  
+	    for (var key in arr) {
+	    	if(arr[key].id!=0){
+	         parms.push(arr[key].id);
+	    	}
+	    }
+	    var parm = new Object();
+	    parm.mid=parms.join(",");
+	    parm.rid=rid;
+	    $.ajax({
+			type : "POST",
+			url : "./user/updateTree",
+			dataType : "json",
+			contentType : "application/json",
+			data : JSON.stringify(parm),
+			async : false,
+			success : function(data) {
+				if (data.success) {
+					$('#Modal_modual').modal('hide')
+					bootbox.alert("修改成功")
+				}else{
+					bootbox.alert(data.msg)
+				} 
+			}
+		});
+	})
+	
+	var formatterEdit=function(value,row,index){
+		 return "<button onclick=edit('"+value+"') type='button' class='btn btn-primary' data-toggle='modal' data-target='#Modal_modual'>编辑</button>&nbsp;<button onclick=deleteCity('"+value+"') type='button' class='btn btn-primary'>删除</button>";
+	};
+	
+	$('#table_list').bootstrapTable({
+		url : domainUrl + "user/rolePage", // 请求后台的URL
+		method : 'get', // 请求方式
+		toolbar : '#toolbar', // 工具按钮用哪个容器
+		striped : true, // 是否显示行间隔色
+		cache : false, // 是否使用缓存，默认为true，
+		pagination : true, // 是否显示分页
+		sortable : false, // 是否启用排序
+		sortOrder : "asc", // 排序方式
+		queryParams :  function(params) {
+			var temp = { 
+					pageSize : params.limit, // 页面大小
+					currentPage : params.offset/params.limit+1, // 页码
+					rname: $("#rname").val().trim(),
+				};			
+				return "params="+encodeURI(JSON.stringify(temp));
+			},// 传递参数
+		queryParamsType: "limit",
+		sidePagination : "server", // 分页方式：client客户端分页，server服务端分页
+		pageNumber : 1, // 初始化加载第一页，默认第一页
+		pageSize : 10, // 每页的记录行数
+		pageList : [10], // 可供选择的每页的行数
+		search : false, // 是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+		strictSearch : true,
+		showRefresh : false, // 是否显示刷新按钮
+		minimumCountColumns : 2, // 最少允许的列数
+		clickToSelect : true, // 是否启用点击选中行
+		uniqueId : "rid", // 每一行的唯一标识，一般为主键列
+		showColumns: true,
+		showToggle : true, // 是否显示详细视图和列表视图的切换按钮
+		cardView : false, // 是否显示详细视图
+		detailView : false, // 是否显示父子表
+		columns : [ {
+			field : 'rid',
+			title : 'ID',
+			width:100
+		}, {
+			field : 'rname',
+			title : '角色',
+			width:150
+		},{
+			field : 'rid',
+			title : '操作',
+			formatter:formatterEdit,
+			width:150
+		},
+		],
+		onLoadSuccess:function(){
+			window.parent.iframeAutoHeight(iframe);
+		}
+	});
+	
+	
+	//查询按钮
+	$("#btn_query").click(function() {
+		$('#table_list').bootstrapTable('refreshOptions',{pageNumber:1,pageSize:10});
+	});
+	
+	//重置按钮
+	$("#btn_reset").click(function() {
+		$("input[r=reset]").val("");
+	});
+	
+   // 绑定键盘按下事件(回车键查询) 
+   $(document).keypress(function(e) {  
+    // 回车键事件  
+       if(e.which == 13) {  
+    	   $("#btn_query").click();
+       }  
+   });
+	
+})
+
+
+</script>
+  
+  
+<body>
+    <div class="panel-body" style="padding-bottom:0px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form id="formSearch" class="form-horizontal">
+                    <div class="form-group" style="margin-top:15px">
+                        <label class="control-label col-sm-1" for="rname">角色</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="rname">
+                        </div>
+                        <div class="col-sm-4" style="text-align:left;">
+                            <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>       
+
+        <div id="toolbar" class="btn-group">
+            <button id="btn_add" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+            </button>
+        </div>
+        <table id="table_list" style="table-layout:fixed;word-break:break-all; word-wrap:break-all;"></table>
+    </div>
+</body>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="Modal_modual" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">权限控制</h4>
+            </div>
+            <div class="modal-body"><div id="tree"></div></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="btn">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+</html>

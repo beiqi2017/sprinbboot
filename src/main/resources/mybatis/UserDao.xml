@@ -16,6 +16,7 @@
                 <result property="type" column="type"/>
                 <result property="menu" column="menu"/>
                 <result property="pid" column="pid"/>
+                <result property="level" column="level"/>
             </collection>
         </collection>
     </resultMap>
@@ -28,7 +29,8 @@
     </select>
     
      <select id="list" parameterType="com.example.demo.domain.User" resultType="com.example.demo.domain.User">
-        SELECT u.* FROM user u 
+        SELECT u.*,r.rname as rname FROM user u inner join user_role ur on ur.uid=u.uid 
+        inner join role r on r.rid=ur.rid
         <include refid="page" />  
     </select>
     
