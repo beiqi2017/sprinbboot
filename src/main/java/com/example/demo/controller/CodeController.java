@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  
 @Controller 
 public class CodeController { 
-    private int width = 78;//定义图片的width  
+    private int width = 70;//定义图片的width  
     private int height = 20;//定义图片的height  
     private int codeCount = 4;//定义图片上显示验证码的个数  
-    private int xx = 15; 
+    private int xx = 13; 
     private int fontHeight = 18; 
     private int codeY = 16; 
     char[] codeSequence = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 
