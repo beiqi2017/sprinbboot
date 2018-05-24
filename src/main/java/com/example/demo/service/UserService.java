@@ -38,5 +38,10 @@ public interface UserService {
     public List<Map<String,Object>> getTree(Integer rid);
     
     public void  updateTree(JSONObject parm);
+    
+    public void  addRole(JSONObject parm);
+    
+    
+    public void upStatus(JSONObject parm);
 	
 }

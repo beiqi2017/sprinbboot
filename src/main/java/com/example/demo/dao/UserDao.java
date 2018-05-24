@@ -16,6 +16,9 @@ public interface UserDao {
 	  
 	  void update(User user);
 	  
+	  
+	  void upStatus(User user);
+	  
 	  /**
 	     * 分页查询数据
 	     * @return

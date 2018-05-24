@@ -29,6 +29,20 @@ public class TestController {
 		return userService.list(params);
 	}
 	
+	@RequestMapping("/upStatus")
+	@ResponseBody
+	public Map<String,Object> upStatus(@RequestBody JSONObject parm) {
+		HashMap<String,Object> result=new HashMap<String,Object>();
+		try {
+			userService.upStatus(parm);
+			result.put("success", true);
+		} catch (Exception e) {
+			result.put("success", false);
+			result.put("msg", "更新失败");
+		}
+		return result;
+	}
+	
 	@RequestMapping(value = "/rolePage", method = RequestMethod.GET)
 	@ResponseBody
 	public  Map<String,Object> testFindByPage(@RequestParam("params") String params) {
@@ -55,6 +69,23 @@ public class TestController {
 		}
 		return result;
 	}
+	
+	
+	@RequestMapping("/addRole")
+	@ResponseBody
+	public Map<String,Object> addRole(@RequestBody JSONObject parm) {
+		HashMap<String,Object> result=new HashMap<String,Object>();
+		try {
+			userService.addRole(parm);
+			result.put("success", true);
+		} catch (Exception e) {
+			result.put("success", false);
+			result.put("msg", "新增失败");
+		}
+		return result;
+	}
+	
+	
 	
 	@RequestMapping(value = "/menu", method = RequestMethod.GET)
 	@ResponseBody

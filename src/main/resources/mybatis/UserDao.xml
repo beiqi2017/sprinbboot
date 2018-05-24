@@ -6,6 +6,7 @@
         <id property="uid" column="uid"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
+        <result property="status" column="status"/>
         <collection property="roles" ofType="com.example.demo.domain.Role">
             <id property="rid" column="rid"/>
             <result property="rname" column="rname"/>
@@ -25,12 +26,13 @@
         inner join role r on r.rid=ur.rid
         inner join module_role mr on mr.rid=r.rid 
         inner join module m on mr.mid=m.mid 
-        WHERE username=#{name} and m.type!='menu'
+        WHERE username=#{name} and m.type!='menu' and u.status='normal'
     </select>
     
      <select id="list" parameterType="com.example.demo.domain.User" resultType="com.example.demo.domain.User">
-        SELECT u.*,r.rname as rname FROM user u inner join user_role ur on ur.uid=u.uid 
-        inner join role r on r.rid=ur.rid
+        SELECT u.*,md.rname as rname FROM user u left join 
+          (select r.*,ur.uid from role r, user_role ur where r.rid=ur.rid) md 
+          on md.uid=u.uid 
         <include refid="page" />  
     </select>
     
@@ -50,4 +52,9 @@
     <update id="update" parameterType="com.example.demo.domain.User" >
 	    update user set username=#{username} ,password=#{password}  where uid=#{uid}
 	</update>
+	
+	<update id="upStatus" parameterType="com.example.demo.domain.User" >
+	    update user set status=#{status}  where uid=#{uid}
+	</update>
+	
 </mapper>

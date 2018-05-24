@@ -21,11 +21,11 @@
 <!-- 引入中文语言包 -->
 <script src="./plugin/bootstrap-table-zh-CN.js"></script>
 <script src="./plugin/bootstrap-treeview.min.js"></script> 
-
+<script src="./plugin/bootbox.min.js"></script>
 </head>
 <style> 
 
-.modal-dialog { 
+#Modal_modual .modal-dialog { 
     position: absolute; 
     top: 0; 
     bottom: 0; 
@@ -33,7 +33,7 @@
     right: 0; 
 } 
 
-.modal-content { 
+#Modal_modual .modal-content { 
     /*overflow-y: scroll; */ 
     position: absolute; 
     top: 0; 
@@ -41,7 +41,7 @@
     width: 100%; 
 } 
 
-.modal-body { 
+#Modal_modual .modal-body { 
     overflow-y: scroll; 
     position: absolute; 
     top: 55px; 
@@ -49,9 +49,9 @@
     width: 100%; 
 } 
 
-.modal-header .close {margin-right: 15px;} 
+#Modal_modual .modal-header .close {margin-right: 15px;} 
 
-.modal-footer {
+#Modal_modual .modal-footer {
     position: absolute; 
     width: 100%; 
     bottom: 0; 
@@ -142,10 +142,32 @@ function edit(roleId) {
     });
 };
 
-
+function add() {
+    var parm = new Object();
+    parm.role = $("#role").val().trim();
+    if (!parm.role) {
+		bootbox.alert("角色名不能为空！");
+		return;
+	}
+    $.ajax({
+		type : "POST",
+		url : "./user/addRole",
+		dataType : "json",
+		contentType : "application/json",
+		data : JSON.stringify(parm),
+		async : false,
+		success : function(data) {
+			if (data.success) {
+				bootbox.alert("新增成功", function(){$('#role_add').modal('hide') })
+				$('#table_list').bootstrapTable('refreshOptions',{pageNumber:1,pageSize:10});
+			}else{
+				bootbox.alert(data.msg)
+			} 
+		}
+	});
+}
 
 $(function() {
-	
 	$("#btn").click(function (e) {
 	    var arr = $('#tree').treeview('getChecked');
 	    var parms = new Array();  
@@ -250,9 +272,9 @@ $(function() {
        }  
    });
    
-   $("#btn_add").click(function (e) {
+  /*  $("#btn_add").click(function (e) {
 	   window.location.href = "./role_add.html?id="+iframe;
-   })
+   }) */
 	
 })
 
@@ -280,8 +302,8 @@ $(function() {
         </div>       
 
         <div id="toolbar" class="btn-group">
-            <button id="btn_add" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+            <button id="btn_add" type='button' class='btn btn-default' data-toggle='modal' data-target='#role_add'>
+               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
             </button>
         </div>
         <table id="table_list" style="table-layout:fixed;word-break:break-all; word-wrap:break-all;"></table>
@@ -305,5 +327,32 @@ $(function() {
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="role_add" tabindex="-1" role="dialog" aria-labelledby="roleLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times; </button>
+				<h4 class="modal-title" id="roleLabel"> 新增角色 </h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-offset-1 col-sm-2 control-label">角色</label>
+						<div class="col-sm-6">
+							<input type="text" class="form-control" id="role" placeholder="角色名">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="add()">提交</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>	
+
 
 </html>

@@ -1,6 +1,7 @@
 package com.example.demo.shiro;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -49,7 +50,7 @@ public class AuthRealm extends AuthorizingRealm{
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
     	String username = (String)super.getAvailablePrincipal(principal); 
     	User user = userService.findUserByUserName(username);
-        List<String> permissions=new ArrayList<String>();
+    	Set<String> permissions=new HashSet<String>();
         Set<Role> roles = user.getRoles();
         if(roles.size()>0) {
             for(Role role : roles) {
@@ -62,7 +63,8 @@ public class AuthRealm extends AuthorizingRealm{
             }
         }
         SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
-        info.addStringPermissions(permissions);//将权限放入shiro中.
+       // info.addStringPermissions(permissions);//将权限放入shiro中.
+        info.setStringPermissions(permissions);
         return info;
     }
 

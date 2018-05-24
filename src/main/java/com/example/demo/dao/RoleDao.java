@@ -13,9 +13,11 @@ public interface RoleDao {
      * 分页查询数据
      * @return
      */
-    Page<Role> findByPage();
+    Page<Role> findByPage(Role role);
     
     void delete(int rid);
     
     void insert(List list);
+    
+    void add(Role role);
 }

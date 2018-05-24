@@ -60,11 +60,11 @@ html,body{height:100%}
 	        success: function (result) {
 	          $.each(result, function (index, obj) {
                  
-	            var html='<div class="panel panel-default">'+
+	            var html='<div class="panel panel-default" style="margin:0px;">'+
 				 '<div class="panel-heading" role="tab" id="heading'+index+'">'+
-					'<h4 class="panel-title" style="text-align:center">'+
+					'<h4 class="panel-title" style="text-align:center;">'+
 						'<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'+index+'" aria-expanded="true" aria-controls="collapse'+index+'">'+ 
-						 obj.menu +
+						 '<font style="font-weight:bold;">'+obj.menu +'</font>'+
 						 '</a>'+
 					'</h4>'+
 				'</div>'+
@@ -113,8 +113,7 @@ html,body{height:100%}
 			async : false,
 			success : function(data) {
 				if (data.success) {
-					$('#myModal').modal('hide')
-					bootbox.alert("修改成功")
+					bootbox.alert("修改成功", function(){$('#myModal').modal('hide') })
 				}else{
 					bootbox.alert(data.msg)
 				} 

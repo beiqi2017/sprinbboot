@@ -87,8 +87,10 @@ public class UserServiceImpl implements UserService{
 	     // 每页行数
 	     int pageSize = StringUtils.isEmpty(jsonObject.getString("pageSize")) ? 10 : Integer.parseInt(jsonObject.getString("pageSize"));
 
+	     Role role=new Role();
+	     role.setRname(jsonObject.getString("rname"));
 	     PageHelper.startPage(currentPage, pageSize);
-	     Page<Role> roles = roleDao.findByPage();
+	     Page<Role> roles = roleDao.findByPage(role);
 	     Map<String,Object> map=new HashMap<String,Object>();
 		 map.put("total",roles.getTotal());
 		 map.put("rows",roles.getResult());
@@ -146,15 +148,37 @@ public class UserServiceImpl implements UserService{
 	public void updateTree(JSONObject parm) {
 		Integer rid=parm.getInteger("rid");
 		roleDao.delete(rid);
-		String[] mid=parm.getString("mid").split(",");
-		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
-		for(int i=0;i<mid.length;i++) {
-			Map<String,Object> map=new HashMap<String,Object>();
-			map.put("mid", new Integer(mid[i]));
-			map.put("rid", rid);
-			list.add(map);
+		if(!"".equals(parm.getString("mid"))) {
+			String[] mid=parm.getString("mid").split(",");
+			List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+			for(int i=0;i<mid.length;i++) {
+				Map<String,Object> map=new HashMap<String,Object>();
+				map.put("mid", new Integer(mid[i]));
+				map.put("rid", rid);
+				list.add(map);
+			}
+			roleDao.insert(list);
 		}
-		roleDao.insert(list);
+	}
+	
+	
+	public void addRole(JSONObject parm) {
+		Role role=new Role();
+		role.setRname(parm.getString("role"));
+		roleDao.add(role);
+	}
+	
+	
+	public void upStatus(JSONObject parm) {
+		User user=new User();
+		user.setUid(parm.getInteger("id"));
+		String status=parm.getString("status");
+		if("恢复".equals(status)) {
+			user.setStatus("noraml");
+		}else {
+			user.setStatus("stop");
+		}
+		userMapper.upStatus(user);
 	}
 	 
 }
