@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.dao.ModuleDao;
 import com.example.demo.dao.RoleDao;
@@ -178,7 +180,22 @@ public class UserServiceImpl implements UserService{
 		}else {
 			user.setStatus("stop");
 		}
-		userMapper.upStatus(user);
+		userMapper.update(user);
 	}
+	
+	@Transactional
+    public void addUser(JSONObject parm) {
+    	User user=JSON.parseObject(parm.toJSONString(), User.class);
+    	user.setStatus("normal");
+    	userMapper.add(user);
+    	userMapper.addRole(user);
+    };
+    
+    @Transactional
+    public void updateUser(JSONObject parm) {
+    	User user=JSON.parseObject(parm.toJSONString(), User.class);
+    	userMapper.upRole(user);
+    	userMapper.update(user);
+    };   
 	 
 }

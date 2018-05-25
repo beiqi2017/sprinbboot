@@ -17,11 +17,15 @@ public interface UserDao {
 	  void update(User user);
 	  
 	  
-	  void upStatus(User user);
+	  void upRole(User user);
 	  
 	  /**
 	     * 分页查询数据
 	     * @return
 	     */
 	 Page<User> findByPage();
+	 
+	 void add(User user);
+	 
+	 void addRole(User user);
 }

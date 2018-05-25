@@ -43,5 +43,11 @@ public interface UserService {
     
     
     public void upStatus(JSONObject parm);
+    
+    
+    public void addUser(JSONObject parm);
+    
+    public void updateUser(JSONObject parm);
+    
 	
 }

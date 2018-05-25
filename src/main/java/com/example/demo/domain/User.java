@@ -16,6 +16,7 @@ public class User extends Base implements Serializable{
 	private String password;
 	private String status;
 	private String rname;
+	private Integer rid;
 	private Set<Role> roles=new HashSet<Role>();
 	public Integer getUid() {
 		return uid;
@@ -53,6 +54,12 @@ public class User extends Base implements Serializable{
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public Integer getRid() {
+		return rid;
+	}
+	public void setRid(Integer rid) {
+		this.rid = rid;
 	}
 	
 	

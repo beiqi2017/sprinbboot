@@ -50,11 +50,23 @@
     </sql> 
     
     <update id="update" parameterType="com.example.demo.domain.User" >
-	    update user set username=#{username} ,password=#{password}  where uid=#{uid}
+	    update user set status=#{status}
+		 <if test="password!=null and password!=''">
+		 	, password=#{password}
+		 </if>
+		 where uid=#{uid}
 	</update>
 	
-	<update id="upStatus" parameterType="com.example.demo.domain.User" >
-	    update user set status=#{status}  where uid=#{uid}
+	<update id="upRole" parameterType="com.example.demo.domain.User" >
+	    update user_role set rid=#{rid}  where uid=#{uid}
 	</update>
 	
+	 <insert id="add" parameterType="com.example.demo.domain.User" keyProperty="uid" useGeneratedKeys="true">
+	     insert into user(username,password,status)  VALUES (#{username},#{password},#{status})
+	 </insert>
+	 
+	 <insert id="addRole" parameterType="com.example.demo.domain.User">
+	     insert into user_role(uid,rid)  VALUES (#{uid},#{rid})
+	 </insert>
+	 
 </mapper>

@@ -56,6 +56,7 @@ function upStatus(id,text) {
 	});
 }
 
+
 $(function() {
 	
 	var formatterEdit=function(value,row,index){
@@ -64,7 +65,7 @@ $(function() {
 		}else{
 			text="恢复";
 		}
-		 return "<button onclick=upStatus('"+row.uid+"','"+text+"') type='button' class='btn btn-primary'>"+text+"</button>&nbsp;<button onclick=delete('"+value+"') type='button' class='btn btn-primary'>删除</button>";
+		 return "<button onclick=upStatus('"+row.uid+"','"+text+"') type='button' class='btn btn-primary'>"+text+"</button>";
 	};
 	var formatterStatus=function(value,row,index){
 		var result="";
@@ -79,6 +80,24 @@ $(function() {
 		return result;
 	}
 	
+	 var query = new Object();
+	    query.pageSize=999;
+	    query.currentPage=1;
+		params1="params="+encodeURI(JSON.stringify(query));
+		$.ajax({
+			type : "GET",
+			url : "./user/rolePage",
+			dataType : "json",
+			contentType : "application/json",
+			data : params1,
+			async : false,
+			success : function(data) {
+					 $.each(data.rows, function (index, obj) {
+					    $("#rname").append('<option value="'+obj.rid+'">'+obj.rname+'</option>');
+					 })
+			}
+		});
+		
 	$('#table_list').bootstrapTable({
 		url : domainUrl + "user/page", // 请求后台的URL
 		method : 'get', // 请求方式
@@ -93,7 +112,7 @@ $(function() {
 					pageSize : params.limit, // 页面大小
 					currentPage : params.offset/params.limit+1, // 页码
 					username: $("#username").val().trim(),
-					password: $("#password").val().trim(),
+					rname: $("#rname").val().trim(),
 				};			
 				return "params="+encodeURI(JSON.stringify(temp));
 			},// 传递参数
@@ -113,6 +132,8 @@ $(function() {
 		cardView : false, // 是否显示详细视图
 		detailView : false, // 是否显示父子表
 		columns : [ {
+			radio : true
+        },{
 			field : 'uid',
 			title : 'ID',
 			width:150
@@ -238,6 +259,19 @@ $(function() {
     	   $("#btn_query").click();
        }  
    });
+   
+	
+   $("#btn_edit").click(function (e) {
+	  var rows=$('#table_list').bootstrapTable('getSelections');
+	  if(rows.length==0){
+		  bootbox.alert("请先选择记录")
+	  }else{
+         window.location.href = "./user_add.html?id="+iframe+"&row="+encodeURI(JSON.stringify(rows[0]));
+	  }
+   }) 
+   $("#btn_add").click(function (e) {
+	   window.location.href = "./user_add.html?id="+iframe;
+   }) 
 	
 })
 
@@ -252,13 +286,15 @@ $(function() {
             <div class="panel-body">
                 <form id="formSearch" class="form-horizontal">
                     <div class="form-group" style="margin-top:15px">
-                        <label class="control-label col-sm-1" for="username">部门</label>
+                        <label class="control-label col-sm-1" for="username">账号</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="username">
                         </div>
-                        <label class="control-label col-sm-1" for="password">状态</label>
+                        <label class="control-label col-sm-1" for="password">角色</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="password">
+                            <select class="form-control" id="rname">
+                               <option value="">请选择</option>
+                            </select>
                         </div>
                         <div class="col-sm-4" style="text-align:left;">
                             <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- Bootstrap -->
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="./plugin/bootbox.min.js"></script>
+</head>
+<script type="text/javascript">
+var url=document.location.href;
+var domainUrl=url.substring(0,url.indexOf("business"));
+
+var row;
+var params = location.search.substr(1); // 获取参数 平且去掉?
+var ArrParam = params.split('&');
+var iframe= ArrParam[0].split('=')[1];
+if (ArrParam.length == 2) {
+	row= params.split('=')[2];
+};
+
+function returnList(){
+	window.location.href="./user.html?id="+iframe; 
+};
+
+function add() {
+	var userInfo = new Object();
+	var url="./user/updateUser"
+	userInfo.uid = $("#uid").val();
+	userInfo.username = $("#username").val();
+	userInfo.password = $("#password").val();
+	userInfo.rid = $("#rid").val();
+	if (!userInfo.password || !userInfo.username || !rid) {
+		bootbox.alert("密码信息不能为空！");
+		return;
+	}
+	if(!row){
+	  url="./user/addUser"
+	  password1 = $("#password1").val();
+	  if (userInfo.password != password1) {
+		bootbox.alert("密码和确认密码不一致！");
+		return;
+	  }
+	}else{
+	  userInfo.status = $("#status").val();
+	}
+
+	$.ajax({
+		type : "POST",
+		url : url,
+		dataType : "json",
+		contentType : "application/json",
+		data : JSON.stringify(userInfo),
+		async : false,
+		success : function(data) {
+			if (data.success) {
+				bootbox.alert("修改成功", function(){window.location.href="./user.html?id="+iframe;  })
+			}else{
+				bootbox.alert(data.msg)
+			} 
+		}
+	});
+}
+
+
+$(function() {
+	var parm = new Object();
+	parm.pageSize=999;
+	parm.currentPage=1;
+	params="params="+encodeURI(JSON.stringify(parm));
+	$.ajax({
+		type : "GET",
+		url : "./user/rolePage",
+		dataType : "json",
+		contentType : "application/json",
+		data : params,
+		async : false,
+		success : function(data) {
+				 $.each(data.rows, function (index, obj) {
+				    $("#rid").append('<option value="'+obj.rid+'">'+obj.rname+'</option>');
+				 })
+		}
+	});
+	
+	if(row){
+	   var json=$.parseJSON(decodeURI(row));
+	   $("#password").val(json.password);
+	   $("#uid").val(json.uid);
+	   $("#username").val(json.username);
+	   $("#status").val(json.status);
+	   $("#username").attr("disabled","disabled");
+	   $("#password1").parents(".form-group").remove();
+	   $('#rid option:contains(' + json.rname + ')').each(function(){
+		   if ($(this).text() == json.rname) {
+		      $(this).attr('selected', true);
+		   }
+	   }); 
+	}
+	
+	
+})
+
+
+</script>
+<body>
+	<div class="panel panel-default" style="border: 0px;background-color:WhiteSmoke;">
+		<div class="panel-body">
+			<form class="form-horizontal">
+			    <input type="hidden" id="uid">
+			    <input type="hidden" id="status">
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-offset-2 col-sm-2 control-label">账号</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="username" placeholder="请输入账号">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-offset-2  col-sm-2 control-label">密码</label>
+					<div class="col-sm-4">
+						<input type="password" class="form-control" id="password" placeholder="请输入密码">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-offset-2  col-sm-2 control-label">确认密码</label>
+					<div class="col-sm-4">
+						<input type="password" class="form-control" id="password1" placeholder="请输入确认密码">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-offset-2  col-sm-2 control-label">角色</label>
+					<div class="col-sm-4">
+					    <select class="form-control" id="rid">
+						</select>
+					</div>
+				</div>
+				<div class="form-group"></div>
+				<div class="form-group">
+					<div class="col-sm-offset-4 col-sm-8">
+						<button type="button" class="btn btn-primary" onclick=add() style="margin-right: 30px;">保存</button>
+						<button type="button" class="btn btn-primary" onclick=returnList()>返回</button>
+					</div>
+				</div>
+				<div class="form-group"></div>
+				<div class="form-group"></div>
+			</form>
+		</div>
+	</div>
+
+
+
+
+
+</body>
+</html>

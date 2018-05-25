@@ -48,23 +48,20 @@ public class AuthRealm extends AuthorizingRealm{
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
+    	 SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
     	String username = (String)super.getAvailablePrincipal(principal); 
     	User user = userService.findUserByUserName(username);
-    	Set<String> permissions=new HashSet<String>();
         Set<Role> roles = user.getRoles();
         if(roles.size()>0) {
             for(Role role : roles) {
                 Set<Module> modules = role.getModules();
                 if(modules.size()>0) {
                     for(Module module : modules) {
-                        permissions.add(module.getMname());
+                    	info.addStringPermission(module.getMname());
                     }
                 }
             }
         }
-        SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
-       // info.addStringPermissions(permissions);//将权限放入shiro中.
-        info.setStringPermissions(permissions);
         return info;
     }
 

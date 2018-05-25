@@ -95,6 +95,32 @@ public class TestController {
 		return result;
 	}
 	
-	
+	@RequestMapping("/addUser")
+	@ResponseBody
+	public Map<String,Object>  addUser(@RequestBody JSONObject parm) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			userService.addUser(parm);
+			result.put("success", true);
+		} catch (Exception e) {
+			result.put("success", false);
+			result.put("msg", "新增失败");
+		}
+		return result;
+	};
+
+	@RequestMapping("/updateUser")
+	@ResponseBody
+	public Map<String,Object>  updateUser(@RequestBody JSONObject parm) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			userService.updateUser(parm);
+			result.put("success", true);
+		} catch (Exception e) {
+			result.put("success", false);
+			result.put("msg", "更新失败");
+		}
+		return result;
+	};
 	
 }

@@ -45,9 +45,7 @@ public class ShiroConfiguration {
              filterChainDefinitionMap.put(module.getUrl(),module.getMname());
         }
         filterChainDefinitionMap.put("/home.html", "authc");
-        filterChainDefinitionMap.put("/*", "anon");
         filterChainDefinitionMap.put("/**", "anon");
-        filterChainDefinitionMap.put("/*.*", "anon");
         
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
