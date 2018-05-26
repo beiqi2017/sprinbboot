@@ -8,20 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Bootstrap -->
 <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-<link href="./plugin/bootstrap-treeview.min.css" rel="stylesheet" />
+<link href="../plugin/bootstrap-treeview.min.css" rel="stylesheet" />
 
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- 引入bootstrap-table样式 -->
-<link href="./plugin/bootstrap-table.min.css" rel="stylesheet">
+<link href="../plugin/bootstrap-table.min.css" rel="stylesheet">
 <!-- bootstrap-table.min.js -->
-<script src="./plugin/bootstrap-table.min.js"></script>
+<script src="../plugin/bootstrap-table.min.js"></script>
 <!-- 引入中文语言包 -->
-<script src="./plugin/bootstrap-table-zh-CN.js"></script>
-<script src="./plugin/bootstrap-treeview.min.js"></script> 
-<script src="./plugin/bootbox.min.js"></script>
+<script src="../plugin/bootstrap-table-zh-CN.js"></script>
+<script src="../plugin/bootstrap-treeview.min.js"></script> 
+<script src="../plugin/bootbox.min.js"></script>
 </head>
 <style> 
 
@@ -114,7 +114,7 @@ function edit(roleId) {
 	rid=roleId
 	$.ajax({
         type: "get",
-        url: "./user/getTree?rid="+roleId,
+        url: "../user/getTree?rid="+roleId,
         dataType: "json",
         success: function (result) {
             $('#tree').treeview({
@@ -151,7 +151,7 @@ function add() {
 	}
     $.ajax({
 		type : "POST",
-		url : "./user/addRole",
+		url : "../user/addRole",
 		dataType : "json",
 		contentType : "application/json",
 		data : JSON.stringify(parm),
@@ -181,7 +181,7 @@ $(function() {
 	    parm.rid=rid;
 	    $.ajax({
 			type : "POST",
-			url : "./user/updateTree",
+			url : "../user/updateTree",
 			dataType : "json",
 			contentType : "application/json",
 			data : JSON.stringify(parm),
@@ -202,7 +202,7 @@ $(function() {
 	};
 	
 	$('#table_list').bootstrapTable({
-		url : domainUrl + "user/rolePage", // 请求后台的URL
+		url :  "../user/rolePage", // 请求后台的URL
 		method : 'get', // 请求方式
 		toolbar : '#toolbar', // 工具按钮用哪个容器
 		striped : true, // 是否显示行间隔色

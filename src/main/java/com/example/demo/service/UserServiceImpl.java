@@ -53,7 +53,8 @@ public class UserServiceImpl implements UserService{
 	    	User u =new User();
 			u.setPage(currentPage);
 			u.setRows(pageSize);
-			
+			u.setRid(jsonObject.getInteger("rid"));
+			u.setUsername(jsonObject.getString("username"));
 			HashMap<String,Object> map=new HashMap<String,Object>();
 			map.put("rows",userMapper.list(u));
 			map.put("total",userMapper.count(u));

@@ -18,7 +18,7 @@ import com.example.demo.service.UserService;
 
 @Controller 
 @RequestMapping(value = "/user", produces = "application/json;charset=UTF-8")
-public class TestController {
+public class SystemController {
 
 	@Autowired
     private UserService userService;

@@ -30,9 +30,15 @@
     </select>
     
      <select id="list" parameterType="com.example.demo.domain.User" resultType="com.example.demo.domain.User">
-        SELECT u.*,md.rname as rname FROM user u left join 
+       select t.* from ( SELECT u.*,md.rname as rname ,md.rid as rid FROM user u left join 
           (select r.*,ur.uid from role r, user_role ur where r.rid=ur.rid) md 
-          on md.uid=u.uid 
+          on md.uid=u.uid ) t where 1=1 
+          <if test="rid!=null">
+		 	and t.rid=#{rid}
+		 </if>
+		  <if test="username!=null and username!=''">
+		 	and t.username=#{username}
+		 </if>
         <include refid="page" />  
     </select>
     
@@ -42,7 +48,15 @@
     </select>
     
       <select id="count" parameterType="com.example.demo.domain.User" resultType="int">
-		 select count(*) FROM user 
+		 select count(1) FROM ( SELECT u.*,md.rname as rname,md.rid as rid FROM user u left join 
+          (select r.*,ur.uid from role r, user_role ur where r.rid=ur.rid) md 
+          on md.uid=u.uid ) t where 1=1 
+		   <if test="rid!=null">
+		 	and t.rid=#{rid}
+		  </if>
+		  <if test="username!=null and username!=''">
+		 	and t.username=#{username}
+		 </if>
     </select>
     
      <sql id="page">  

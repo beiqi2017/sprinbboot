@@ -15,12 +15,12 @@
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <!-- 引入bootstrap-table样式 -->
-<link href="./plugin/bootstrap-table.min.css" rel="stylesheet">
+<link href="../plugin/bootstrap-table.min.css" rel="stylesheet">
 <!-- bootstrap-table.min.js -->
-<script src="./plugin/bootstrap-table.min.js"></script>
+<script src="../plugin/bootstrap-table.min.js"></script>
 <!-- 引入中文语言包 -->
-<script src="./plugin/bootstrap-table-zh-CN.js"></script>
-<script src="./plugin/bootbox.min.js"></script>
+<script src="../plugin/bootstrap-table-zh-CN.js"></script>
+<script src="../plugin/bootbox.min.js"></script>
 </head>
 
 <script type="text/javascript">
@@ -40,7 +40,7 @@ function upStatus(id,text) {
     parm.status = text;
     $.ajax({
 		type : "POST",
-		url : "./user/upStatus",
+		url : "../user/upStatus",
 		dataType : "json",
 		contentType : "application/json",
 		data : JSON.stringify(parm),
@@ -86,7 +86,7 @@ $(function() {
 		params1="params="+encodeURI(JSON.stringify(query));
 		$.ajax({
 			type : "GET",
-			url : "./user/rolePage",
+			url : "../user/rolePage",
 			dataType : "json",
 			contentType : "application/json",
 			data : params1,
@@ -99,7 +99,7 @@ $(function() {
 		});
 		
 	$('#table_list').bootstrapTable({
-		url : domainUrl + "user/page", // 请求后台的URL
+		url :  "../user/page", // 请求后台的URL
 		method : 'get', // 请求方式
 		toolbar : '#toolbar', // 工具按钮用哪个容器
 		striped : true, // 是否显示行间隔色
@@ -112,7 +112,7 @@ $(function() {
 					pageSize : params.limit, // 页面大小
 					currentPage : params.offset/params.limit+1, // 页码
 					username: $("#username").val().trim(),
-					rname: $("#rname").val().trim(),
+					rid: $("#rname").val(),
 				};			
 				return "params="+encodeURI(JSON.stringify(temp));
 			},// 传递参数
@@ -136,7 +136,7 @@ $(function() {
         },{
 			field : 'uid',
 			title : 'ID',
-			width:150
+			width:100
 		}, {
 			field : 'username',
 			title : '账号',
