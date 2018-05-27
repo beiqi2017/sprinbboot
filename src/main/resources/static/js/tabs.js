@@ -10,7 +10,7 @@
          $("#tablist").append('<li id="tab_li_'+tabName+'"><a href="#tab_content_'+tabName+'" data-toggle="tab" id="tab_a_'+tabName+'">'+tabTitle+'<span class="glyphicon glyphicon-remove" onclick="closeTab(this);"></span></a></li>');
          iframeHeight =$("#home").outerHeight();
          var id="iframe_"+tabName;
-         var content = '<iframe id="'+id+'" src=".' +tabUrl+"?id="+id+ '" style="width:100%;margin: 0;padding: 0;" frameborder="0" scrolling="no" onload="javascript:iframeAutoHeight(this.id);" ></iframe>';
+         var content = '<iframe id="'+id+'" src="../' +tabUrl+"?id="+id+ '" style="width:100%;margin: 0;padding: 0;" frameborder="0" scrolling="no" onload="javascript:iframeAutoHeight(this.id);" ></iframe>';
          $("#tab-content").append('<div id="tab_content_'+tabName+'" style="height: '+iframeHeight+'px;overflow: auto;" role="tabpanel" class="tab-pane">'+content+'</div>');
          $("#tab_a_"+tabName).click();
      }

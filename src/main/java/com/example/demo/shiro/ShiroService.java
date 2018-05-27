@@ -32,6 +32,9 @@ public class ShiroService {
              filterChainDefinitionMap.put(module.getUrl(),module.getMname());
         }
 
+        filterChainDefinitionMap.put("/home.html", "authc");
+		filterChainDefinitionMap.put("/**", "anon");
+		
         return filterChainDefinitionMap;
     }
 
