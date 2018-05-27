@@ -37,7 +37,7 @@ html,body{height:100%}
 	$(function() {
 
 		function resize() {
-			var contentHeight = $(document.body).outerHeight(true) - $(".navbar").outerHeight(true);
+			var contentHeight = $(document.body).outerHeight(true) - $(".navbar").outerHeight(true)-4;
 			$(".col-md-9,.col-md-3").css("height", contentHeight + "px");
 			$(".col-md-9,.col-md-3") .css("max-height", contentHeight + "px");
 			$("#home").css("height", contentHeight - $(".nav-tabs").outerHeight() + "px");
@@ -45,7 +45,7 @@ html,body{height:100%}
 		}
 		
 		 window.onresize=function(){
-			// resize();
+			 resize();
 	     }
 		 
 		if(!navigator.userAgent.match(/mobile/i)) { 
