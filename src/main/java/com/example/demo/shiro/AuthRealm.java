@@ -51,18 +51,34 @@ public class AuthRealm extends AuthorizingRealm{
     	 SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
     	String username = (String)super.getAvailablePrincipal(principal); 
     	User user = userService.findUserByUserName(username);
+    	//权限名的集合
+        Set<String> permissions = new HashSet<String>();
+        //角色名的集合
+        Set<String> roleSet = new HashSet<String>();
+        
         Set<Role> roles = user.getRoles();
         if(roles.size()>0) {
             for(Role role : roles) {
+            	roleSet.add(role.getRname());
                 Set<Module> modules = role.getModules();
                 if(modules.size()>0) {
                     for(Module module : modules) {
-                    	info.addStringPermission(module.getMname());
+                    	String  permission=module.getMname();
+                    	if(permission.indexOf("perms")!=-1)
+                    	permissions.add(permission.substring(permission.indexOf("perms")+6, permission.length()-1));
                     }
                 }
             }
         }
+        info.addRoles(roleSet);
+        info.addStringPermissions(permissions);
+        
         return info;
+    }
+    
+    @Override
+    public String getName() {
+      return getClass().getName();
     }
 
 }

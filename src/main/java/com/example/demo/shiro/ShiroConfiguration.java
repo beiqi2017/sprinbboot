@@ -69,13 +69,15 @@ public class ShiroConfiguration {
 		bean.setUnauthorizedUrl("/login");
 		// 配置访问权限
 		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-
+		filterChainDefinitionMap.put("/image/**", "anon");
+        filterChainDefinitionMap.put("/js/**", "anon");
+        filterChainDefinitionMap.put("/plugin/**", "anon");
+        
 		List<Module> result = moduleDao.menu("perm");
 		for (Module module : result) {
 			filterChainDefinitionMap.put(module.getUrl(), module.getMname());
 		}
-		filterChainDefinitionMap.put("/page/home.html", "authc");
-		filterChainDefinitionMap.put("/**", "anon");
+		filterChainDefinitionMap.put("/**", "authc");
 
 		bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return bean;

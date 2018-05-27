@@ -27,13 +27,16 @@ public class ShiroService {
     public Map<String, String> loadFilterChainDefinitions() {
         // 权限控制map.从数据库获取
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+        filterChainDefinitionMap.put("/image/**", "anon");
+        filterChainDefinitionMap.put("/js/**", "anon");
+        filterChainDefinitionMap.put("/plugin/**", "anon");
+        
         List<Module> result=moduleDao.menu("perm");
         for(Module module:result){
              filterChainDefinitionMap.put(module.getUrl(),module.getMname());
         }
 
-        filterChainDefinitionMap.put("/home.html", "authc");
-		filterChainDefinitionMap.put("/**", "anon");
+		filterChainDefinitionMap.put("/**", "authc");
 		
         return filterChainDefinitionMap;
     }

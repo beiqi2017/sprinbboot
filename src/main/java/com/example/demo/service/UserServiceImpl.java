@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService{
 			List<Map<String,Object>> node2 =new ArrayList<Map<String,Object>>();
 			List<Right> list2 =moduleDao.module(rid,3, right.getMid());
 			for(int j=0;j<list2.size();j++) {
-				Right right1=list2.get(i);
+				Right right1=list2.get(j);
 				HashMap<String,Object> map1=new HashMap<String,Object>();
 				map1.put("id", right1.getMid());
 				map1.put("text", right1.getMenu());
