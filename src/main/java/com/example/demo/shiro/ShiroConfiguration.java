@@ -89,6 +89,8 @@ public class ShiroConfiguration {
 		System.err.println("--------------shiro已经加载----------------");
 		DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
 		manager.setRealm(authRealm);
+		 // 自定义缓存实现 使用redis
+		manager.setCacheManager(cacheManager());
 		manager.setSessionManager(sessionManager());
 		return manager;
 	}
@@ -132,7 +134,7 @@ public class ShiroConfiguration {
 		redisManager.setHost(host);
 		redisManager.setPort(port);
 		redisManager.setExpire(1800);// 配置缓存过期时间
-		redisManager.setTimeout(0);
+		redisManager.setTimeout(timeout);
 		// redisManager.setPassword(password);
 		return redisManager;
 	}
