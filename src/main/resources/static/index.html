@@ -66,6 +66,7 @@
 					if (data.success) {
 						 window.location.href="./page/home.html";
 					} else {
+						changeImg();
 						bootbox.alert(data.msg)
 					}
 		           }
