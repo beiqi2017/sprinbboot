@@ -69,7 +69,13 @@ public class UserServiceImpl implements UserService{
 		for(int i=0;i<result.size();i++) {
 			Module module=result.get(i);
 			List<Module> result1= moduleDao.subMenu(module.getMid(),user.getUid());
-		    module.setModules(result1);
+			if(result1.size()>0) {
+				 module.setModules(result1);
+			}else {
+				 result.remove(i);
+				 i--;
+			}
+		  
 		}
 		return result;
 	}
