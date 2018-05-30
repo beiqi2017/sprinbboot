@@ -100,6 +100,18 @@ public class SystemController {
 		return result;
 	}
 	
+	@RequestMapping(value = "/info", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> info(HttpSession session) {
+		HashMap<String,Object> result=new HashMap<String,Object>();
+		String username=(String) session.getAttribute("user");
+		String rolename=(String) session.getAttribute("role");
+		result.put("username", username);
+		result.put("rolename", rolename);
+		return result;
+	}
+	
+	
 	@RequestMapping("/addUser")
 	@ResponseBody
 	public Map<String,Object>  addUser(@RequestBody JSONObject parm) {

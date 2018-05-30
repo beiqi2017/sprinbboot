@@ -37,7 +37,7 @@ html,body{height:100%}
 	$(function() {
 
 		function resize() {
-			var contentHeight = $(document.body).outerHeight(true) - $(".navbar").outerHeight(true)-4;
+			var contentHeight = $(document.body).outerHeight(true) - $(".navbar").outerHeight(true)-2;
 			$(".col-md-9,.col-md-3").css("height", contentHeight + "px");
 			$(".col-md-9,.col-md-3") .css("max-height", contentHeight + "px");
 			$("#home").css("height", contentHeight - $(".nav-tabs").outerHeight() + "px");
@@ -68,7 +68,11 @@ html,body{height:100%}
 						 '</a>'+
 					'</h4>'+
 				'</div>'+
-				'<div id="collapse'+index+'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'+index+'">'+
+				'<div id="collapse'+index+'" class="panel-collapse collapse ';
+				  if(index==0){
+					  html=html+'in'
+				  }
+				html=html+'" role="tabpanel" aria-labelledby="heading'+index+'">'+
 					'<div class="panel-body" style="padding:0px;overflow-y: auto;max-height:200px;">'+
 						'<ul class="nav nav-list" style="text-align:center">';
 						 $.each(obj.modules, function (index1, obj1) {
@@ -86,6 +90,16 @@ html,body{height:100%}
 	        }
 	    });
 		
+		
+		$.ajax({
+	        type: "get",
+	        url: "../user/info",
+	        dataType: "json",
+	        success: function (result) {
+	        	$("#username").text(result.username);
+	        	$("#rolename").text(result.rolename);
+	        }
+	    });
 	})
 	
 	
@@ -148,7 +162,7 @@ html,body{height:100%}
 
 	<div class="ontainer-fluid">
 		<div class="row" style="margin:0px;">
-			<div class="col-md-3" style="padding:1px;border-right: 1px solid #ddd;overflow: auto;">
+			<div class="col-md-3" style="padding:1px;border-right: 1px solid #ddd;overflow: auto;background-color:#E8E8E8;">
 
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 					
@@ -168,15 +182,22 @@ html,body{height:100%}
 
 					<!-- Tab panes -->
 					<div class="tab-content" style="padding: 0px;" id="tab-content">
-						<div role="tabpanel" class="tab-pane active" id="home" style="padding: 0px;overflow: auto;">
+						<div role="tabpanel" class="tab-pane active" id="home" style="padding: 0px; overflow: auto;">
 
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-							aa<br> aa<br> aa<br> aa<br> aa<br> aa<br>
-
+							<div class="panel-body" style="padding-bottom: 0px;">
+								<div class="panel panel-info">
+									<div class="panel-heading">用户信息</div>
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-md-2">用户名：</div>
+											<div class="col-md-2" id="username"></div>
+											<div class="col-md-2">角色：</div>
+											<div class="col-md-2" id="rolename"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
 						</div>
 					</div>
 				</div>

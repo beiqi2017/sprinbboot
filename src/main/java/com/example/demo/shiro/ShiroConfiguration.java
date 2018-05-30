@@ -66,7 +66,7 @@ public class ShiroConfiguration {
 		// 配置登录的url和登录成功的url
 		bean.setLoginUrl("/login");
 		bean.setSuccessUrl("/home.html");
-		bean.setUnauthorizedUrl("/login");
+		bean.setUnauthorizedUrl("/forbidden");
 		// 配置访问权限
 		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 		filterChainDefinitionMap.put("/image/**", "anon");

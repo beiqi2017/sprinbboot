@@ -32,6 +32,17 @@ public class LoginController {
         return "index";
     }
 	
+	
+	@RequestMapping("/forbidden")
+	@ResponseBody
+    public Map<String,Object> forbidden(){
+		HashMap<String,Object> map=new HashMap<String,Object>();
+		map.put("success",false);
+		map.put("msg","没有权限");
+		return map;
+    }
+	
+	
     @RequestMapping("/loginUser")
     @ResponseBody
     public Map<String,Object> loginUser(@RequestBody JSONObject login,HttpSession session) {
@@ -49,8 +60,6 @@ public class LoginController {
  	    token.setRememberMe(true);
         try {
         	subject.login(token);
-            String user=(String) subject.getPrincipal();
-            session.setAttribute("user", user);
         	map.put("success",true);
             return map;
         }catch (AuthenticationException e) {
