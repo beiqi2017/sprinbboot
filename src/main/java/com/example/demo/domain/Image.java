@@ -1,0 +1,77 @@
+package com.example.demo.domain;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class Image extends Base implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2872483321858599041L;
+	private Integer id;
+	private String type;
+	private String desc;
+	private String status;
+	private String path;
+	private Date createtime;
+	private String createuser;
+	private Date updatetime;
+	private String updateuser;
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getDesc() {
+		return desc;
+	}
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	public Date getCreatetime() {
+		return createtime;
+	}
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+	public String getCreateuser() {
+		return createuser;
+	}
+	public void setCreateuser(String createuser) {
+		this.createuser = createuser;
+	}
+	public Date getUpdatetime() {
+		return updatetime;
+	}
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
+	}
+	public String getUpdateuser() {
+		return updateuser;
+	}
+	public void setUpdateuser(String updateuser) {
+		this.updateuser = updateuser;
+	}
+	
+}

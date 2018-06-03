@@ -22,7 +22,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
 @Service
-@Transactional
 public class UserServiceImpl implements UserService{
 
 	@Autowired

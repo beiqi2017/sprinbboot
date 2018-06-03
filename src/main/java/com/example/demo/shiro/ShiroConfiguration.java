@@ -72,6 +72,7 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/image/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/plugin/**", "anon");
+        filterChainDefinitionMap.put("/css/**", "anon");
         
 		List<Module> result = moduleDao.menu("perm");
 		for (Module module : result) {

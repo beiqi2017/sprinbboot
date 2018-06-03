@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- Bootstrap -->
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/summernote/0.8.10/summernote.css" rel="stylesheet">
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../plugin/bootbox.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js"></script>
+<script src="https://cdn.bootcss.com/summernote/0.8.10/summernote.min.js"></script>
+<script src="https://cdn.bootcss.com/summernote/0.8.10/lang/summernote-zh-CN.min.js"></script>
+</head>
+<script type="text/javascript">
+var url=document.location.href;
+var domainUrl=url.substring(0,url.indexOf("business"));
+
+var id;
+var params = location.search.substr(1); // 获取参数 平且去掉?
+var ArrParam = params.split('&');
+var iframe= ArrParam[0].split('=')[1];
+if (ArrParam.length == 2) {
+	id= params.split('=')[2];
+};
+
+function returnList(){
+	window.location.href="./news.html?id="+iframe; 
+};
+
+function add() {
+	$("form").bootstrapValidator('validate');//提交验证
+	if ($("form").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
+        
+	var Info = new Object();
+	Info.type = $("#type").val();
+	Info.title = $("#title").val();
+	Info.content= $('#summernote').summernote('code');
+
+	$.ajax({
+		type : "POST",
+		url : "../website/addNews",
+		dataType : "json",
+		contentType : "application/json",
+		data : JSON.stringify(Info),
+		async : false,
+		success : function(data) {
+			if (data.success) {
+				bootbox.alert("新增成功", function(){window.location.href="./news.html?id="+iframe;  })
+			}else{
+				bootbox.alert(data.msg)
+			} 
+		}
+	});
+    }
+}
+
+
+$(function() {
+    
+	$('#summernote').summernote({
+		  height: 400,                 // 定义编辑框高度
+		  lang:'zh-CN',  
+		});
+	
+	
+	if(id){
+		$("#addbtn").remove();
+		var parm = new Object();
+		parm.pageSize=999;
+		parm.currentPage=1;
+		parm.id=id;
+		params="params="+encodeURI(JSON.stringify(parm));
+		$.ajax({
+			type : "GET",
+			url : "../website/PageNews",
+			dataType : "json",
+			contentType : "application/json",
+			data : params,
+			async : false,
+			success : function(data) {
+				   $("#id").val(data.rows[0].id).attr("disabled","disabled");
+				   $("#title").val(data.rows[0].title).attr("disabled","disabled");
+				   $('#type option:contains(' + data.rows[0].type + ')').each(function(){
+					   if ($(this).text() == data.rows[0].type) {
+					      $(this).attr('selected', true);
+					   }
+				   }); 
+				   $("#type").attr("disabled","disabled")
+				   $('#summernote').summernote('code',data.rows[0].content);
+				   $('#summernote').summernote('disabled');
+			}
+		});
+		
+	}
+	
+	
+	$('form').bootstrapValidator({
+　　　　　　　　message: 'This value is not valid',
+            　              feedbackIcons: {
+                　　　　　　　　valid: 'glyphicon glyphicon-ok',
+                　　　　　　　　invalid: 'glyphicon glyphicon-remove',
+                　　　　　　　　validating: 'glyphicon glyphicon-refresh'
+            　　　　　　　　   },
+            fields: {
+            	type: {
+                    validators: {
+                        notEmpty: {
+                            message: '类型不能为空'
+                        }
+                    }
+                },
+                title: {
+                    validators: {
+                        notEmpty: {
+                            message: '标题不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '密码长度必须在6到30位之间'
+                        }
+                    }
+                }
+            }
+        });
+})
+
+
+</script>
+<body>
+	<div class="panel panel-default" style="border: 0px;">
+		<div class="panel-body">
+			<form class="form-horizontal">
+			    <input type="hidden" id="id">
+			    <div class="form-group">
+					<label class="control-label col-sm-1" for="type">类型</label>
+                        <div class="col-sm-4">
+                           <select class="form-control" id="type" name="type">
+                               <option value="news">公司新闻</option>
+                               <option value="tab1">tab1</option>
+                               <option value="tab2">tab2</option>
+                               <option value="tab3">tab3</option>
+                            </select>
+                    </div>
+				</div>
+				<div class="form-group">
+					<label for="title" class="col-sm-1 control-label">标题</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="title" name="title" placeholder="请输入标题">
+					</div>
+				</div>
+			    
+				<div class="form-group">
+				   <div id="summernote"></div>
+				</div>
+				
+				
+				<div class="form-group"></div>
+				<div class="form-group">
+					<div class="col-sm-offset-4 col-sm-8">
+						<button type="button" id="addbtn" class="btn btn-primary" onclick=add() style="margin-right: 30px;">保存</button>
+						<button type="button" class="btn btn-primary" onclick=returnList()>返回</button>
+					</div>
+				</div>
+				<div class="form-group"></div>
+				<div class="form-group"></div>
+			</form>
+		</div>
+	</div>
+
+
+</body>
+</html>

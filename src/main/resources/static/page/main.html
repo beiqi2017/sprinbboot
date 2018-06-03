@@ -34,8 +34,16 @@
   padding:0px;
 }
 ol li {
-  font-size:150%;
+  font-size:141%;
   border-bottom: 1px solid WhiteSmoke;
+}
+ul li {
+  font-size:130%;
+}
+ol li span,ul li span{
+  padding-right:5px;
+  color:#ccc;
+  font-size:80%;
 }
 .list-group-item{
 border: 1px solid WhiteSmoke;
@@ -44,7 +52,7 @@ border: 1px solid WhiteSmoke;
 <script>
 	
 	$(function() {
-		$('#demo1').scrollbox();
+		$('#news').scrollbox();
 		$('#pic').scrollbox({
 			direction : 'h',
 			switchItems : 1,
@@ -58,15 +66,15 @@ border: 1px solid WhiteSmoke;
 </head>
 <body>
 
-	<nav class="navbar navbar-default navbar-static-top" style="margin: 0px;background-color:rgba(245, 245, 245, 0.69);">
+	<nav class="navbar navbar-default navbar-static-top" style="margin: 0px;background-color:#2971F9;border-color: rgba(255,255,255,.20);">
 		<div class="container-fluid" >
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-                <a class="navbar-brand" href="#" style="margin-left: 0px;">
-                     <img alt="Brand" src="../image/logo.jpg" height="23px">
+                <a class="navbar-brand" href="#" style="margin-left: 0px;padding:0px">
+                     <img alt="Brand" src="../image/logo.jpg" height="100%">
                 </a>
-                <a class="navbar-brand" href="#" style="font-weight:bold;font-size:150%;">
-                                                     科 讯
+                <a class="navbar-brand" href="#" style="font-weight:bold;font-size:150%;color:white">
+                                                      &nbsp;&nbsp;科 讯
                 </a>
 			</div>
 		</div>
@@ -117,22 +125,22 @@ border: 1px solid WhiteSmoke;
 
 				<div class="panel panel-default" style="margin: 0px;">
 					<!-- Default panel contents -->
-					<div class="panel-heading" style="background-color: #337ab7;color:#fff;border-radius:0px;"><strong>公司新闻</strong></div>
-					<div id="demo1" class="scroll-text">
+					<div class="panel-heading" style="background-color: #337ab7;color:#fff;border-radius:0px;margin: -1px;"><strong>公告</strong></div>
+					<div id="news" class="scroll-text">
 
 						<ul class="list-group">
-							<li class="list-group-item">Cras justo odio</li>
-							<li class="list-group-item">Dapibus ac facilisis in</li>
-							<li class="list-group-item">Morbi leo risus</li>
-							<li class="list-group-item">Porta ac consectetur ac</li>
-							<li class="list-group-item">Vestibulum at eros</li>
-							<li class="list-group-item">Cras justo odio</li>
-							<li class="list-group-item">Dapibus ac facilisis in</li>
-							<li class="list-group-item">Morbi leo risus</li>
-							<li class="list-group-item">Porta ac consectetur ac</li>
-							<li class="list-group-item">Vestibulum at eros</li>
-							<li class="list-group-item">Cras justo odio</li>
-							<li class="list-group-item">Dapibus ac facilisis in</li>
+							<li class="list-group-item">新闻资讯新闻资讯新闻资讯 <span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Dapibus ac facilisis in<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Morbi leo risus<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Porta ac consectetur ac<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Vestibulum at eros<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Cras justo odio<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Dapibus ac facilisis in<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Morbi leo risus<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Porta ac consectetur ac<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Vestibulum at eros<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Cras justo odio<span class="navbar-right">2018-05-31</span></li>
+							<li class="list-group-item">Dapibus ac facilisis in<span class="navbar-right">2018-05-31</span></li>
 						</ul>
 
 					</div>
@@ -162,14 +170,14 @@ border: 1px solid WhiteSmoke;
 							<div class="row-fluid">
 								<div class="span12">
 									<ol>
-										<li>新闻资讯</li>
-										<li>体育竞技</li>
-										<li>娱乐八卦</li>
-										<li>前沿科技</li>
-										<li>环球财经</li>
-										<li>天气预报</li>
-										<li>房产家居</li>
-										<li>网络游戏</li>
+										<li>新闻资讯<span class="navbar-right">2018-05-31</span></li>
+										<li>体育竞技<span class="navbar-right">2018-05-31</span></li>
+										<li>娱乐八卦<span class="navbar-right">2018-05-31</span></li>
+										<li>前沿科技<span class="navbar-right">2018-05-31</span></li>
+										<li>环球财经<span class="navbar-right">2018-05-31</span></li>
+										<li>天气预报<span class="navbar-right">2018-05-31</span></li>
+										<li>房产家居<span class="navbar-right">2018-05-31</span></li>
+										<li>网络游戏<span class="navbar-right">2018-05-31</span></li>
 									</ol>
 								</div>
 							</div>

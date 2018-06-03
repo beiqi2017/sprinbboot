@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>科讯</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+<!-- Bootstrap -->
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../plugin/jquery.scrollbox.min.js"></script>
+<style>
+#createtime{
+  padding-right:5px;
+  color:#ccc;
+  font-size:160%;
+  padding:10px;
+}
+#title {
+    font-weight: 700;
+    font-size: 38px;
+    color: #4d4f53;
+    letter-spacing: 1px;
+    line-height: 54px;
+    padding-top: 40px;
+}
+</style>
+<script>
+var url=document.location.href;
+var domainUrl=url.substring(0,url.indexOf("business"));
+
+var id;
+var params = location.search.substr(1); // 获取参数 平且去掉?
+var ArrParam = params.split('&');
+var iframe= ArrParam[0].split('=')[1];
+if (ArrParam.length == 1) {
+	id= params.split('=')[1];
+};
+
+
+$(function() {
+		
+	if(id){
+		var parm = new Object();
+		parm.pageSize=999;
+		parm.currentPage=1;
+		parm.id=id;
+		params="params="+encodeURI(JSON.stringify(parm));
+		$.ajax({
+			type : "GET",
+			url : "../website/PageNews",
+			dataType : "json",
+			contentType : "application/json",
+			data : params,
+			async : false,
+			success : function(data) {
+				 $("#title").html(data.rows[0].title);
+				 $("title").html(data.rows[0].title);
+				 $("#content").html(data.rows[0].content);
+				 $("#createtime").html(data.rows[0].createtime);
+			}
+		});
+		
+	}
+	
+})
+</script>
+</head>
+<body>
+
+	<nav class="navbar navbar-default navbar-static-top" style="margin: 0px;background-color:#2971F9;border-color: rgba(255,255,255,.20);">
+		<div class="container-fluid" >
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+                <a class="navbar-brand" href="#" style="margin-left: 0px;padding:0px">
+                     <img alt="Brand" src="../image/logo.jpg" height="100%">
+                </a>
+                <a class="navbar-brand" href="#" style="font-weight:bold;font-size:150%;color:white">
+                                                      &nbsp;&nbsp;科 讯
+                </a>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
+
+	<div style="margin: 0 auto; width: 1024px;">
+	
+	     <div id="title" class="text-center"></div>
+	     <div id="createtime" class="text-center"></div>
+	     <div id="content"></div>
+	
+	</div>
+
+	<nav class="navbar navbar-inverse" style="margin-bottom: 0px;border-radius:0px;">
+		<div class="container">
+			<p class="navbar-text" style="text-align: center;float:none;">联系我们：0755-23129000 | ©2018 科讯技术有限公司  </p>
+		</div>
+	</nav>
+	
+</body>
+</html>

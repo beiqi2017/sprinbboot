@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.NewsDao">
+
+    <update id="update" parameterType="com.example.demo.domain.News" >
+	    update news set updatetime=now(),updateuser=#{updateuser}
+		 <if test="status!=null and status!=''">
+		 	, status=#{status}
+		 </if>
+		 where id=#{id}
+	</update>
+	
+	<insert id="insert" parameterType="com.example.demo.domain.News" keyProperty="id" useGeneratedKeys="true">
+	     insert into news(type,title,content,status,createtime,createuser)  
+	     VALUES (#{type},#{title},#{content},#{status},now(),#{createuser})
+	 </insert>
+	 
+	  <select id="findByPage" parameterType="com.example.demo.domain.News" resultType="com.example.demo.domain.News">
+        SELECT n.* FROM news n where 1=1
+         <if test="type!=null and type!=''">
+		 	and type=#{type}
+		 </if>
+		 <if test="title!=null and title!=''">
+		 	and title like concat('%',#{title},'%')
+		 </if>
+		 <if test="status!=null and status!=''">
+		 	and status=#{status}
+		 </if>
+		 <if test="id!=null">
+		 	and id=#{id}
+		 </if>
+		 
+     </select>
+    
+</mapper>

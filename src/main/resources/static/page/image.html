@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Meta, title, CSS, favicons, etc. -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Bootstrap -->
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<!-- 引入bootstrap-table样式 -->
+<link href="../plugin/bootstrap-table.min.css" rel="stylesheet">
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- bootstrap-table.min.js -->
+<script src="../plugin/bootstrap-table.min.js"></script>
+<!-- 引入中文语言包 -->
+<script src="../plugin/bootstrap-table-zh-CN.js"></script>
+<script src="../plugin/bootbox.min.js"></script>
+</head>
+
+<script type="text/javascript">
+var url=document.location.href;
+var domainUrl=url.substring(0,url.indexOf("business"));
+
+var iframe = "";
+var params = location.search.substr(1); // 获取参数 平且去掉?
+var ArrParam = params.split('&');
+if (ArrParam.length == 1) {
+iframe= params.split('=')[1];
+};
+
+function upStatus(id,text) {
+    var parm = new Object();
+    parm.id = id;
+    parm.status = text;
+    $.ajax({
+		type : "POST",
+		url : "../website/updateImage",
+		dataType : "json",
+		contentType : "application/json",
+		data : JSON.stringify(parm),
+		async : false,
+		success : function(data) {
+			if (data.success) {
+				bootbox.alert(text+"成功", function(){$('#table_list').bootstrapTable('refreshOptions',{pageNumber:1,pageSize:10}); })
+			}else{
+				bootbox.alert(data.msg)
+			} 
+		}
+	});
+}
+
+
+$(function() {
+	
+	var formatterEdit=function(value,row,index){
+		if(row.status=='normal'){
+			text="停用";
+		    return "<button onclick=upStatus('"+row.id+"','"+text+"') type='button' class='btn btn-primary'>"+text+"</button>";
+		}
+	};
+	var formatterStatus=function(value,row,index){
+		var result="";
+			switch (value) {
+				case "normal":
+					result="正常";
+					break;
+				case "stop":
+					result="停用";
+					break;
+			}
+		return result;
+	}
+	
+	$('#table_list').bootstrapTable({
+		url :  "../website/PageImage", // 请求后台的URL
+		method : 'get', // 请求方式
+		toolbar : '#toolbar', // 工具按钮用哪个容器
+		striped : true, // 是否显示行间隔色
+		cache : false, // 是否使用缓存，默认为true，
+		pagination : true, // 是否显示分页
+		sortable : false, // 是否启用排序
+		sortOrder : "asc", // 排序方式
+		queryParams :  function(params) {
+			var temp = { 
+					pageSize : params.limit, // 页面大小
+					currentPage : params.offset/params.limit+1, // 页码
+					status: $("#status").val().trim(),
+					type: $("#type").val(),
+				};			
+				return "params="+encodeURI(JSON.stringify(temp));
+			},// 传递参数
+		queryParamsType: "limit",
+		sidePagination : "server", // 分页方式：client客户端分页，server服务端分页
+		pageNumber : 1, // 初始化加载第一页，默认第一页
+		pageSize : 10, // 每页的记录行数
+		pageList : [10], // 可供选择的每页的行数
+		search : false, // 是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+		strictSearch : true,
+		showRefresh : false, // 是否显示刷新按钮
+		minimumCountColumns : 2, // 最少允许的列数
+		clickToSelect : true, // 是否启用点击选中行
+		uniqueId : "id", // 每一行的唯一标识，一般为主键列
+		showColumns: true,
+		showToggle : true, // 是否显示详细视图和列表视图的切换按钮
+		cardView : false, // 是否显示详细视图
+		detailView : false, // 是否显示父子表
+		columns : [ {
+			radio : true
+        },{
+			field : 'id',
+			title : 'ID',
+			width:50
+		}, {
+			field : 'type',
+			title : '类型',
+			width:50
+		},{
+			field : 'desc',
+			title : '描述',
+			width:150
+		}, {
+			field : 'path',
+			title : '文件路径',
+			width:100
+		},{
+			field : 'status',
+			title : '状态',
+			formatter:formatterStatus,
+			width:100
+		},{
+			field : 'createtime',
+			title : '创建时间',
+			width:100
+		},{
+			field : 'createuser',
+			title : '创建人',
+			width:100
+		},{
+			field : 'updatetime',
+			title : '更新时间',
+			width:100
+		},{
+			field : 'updateuser',
+			title : '更新人',
+			width:100
+		},{
+			field : 'id',
+			title : '操作',
+			formatter:formatterEdit,
+			width:150
+		}],
+		onLoadSuccess:function(){
+			window.parent.iframeAutoHeight(iframe);
+		}
+	});
+	
+	//查询按钮
+	$("#btn_query").click(function() {
+		$('#table_list').bootstrapTable('refreshOptions',{pageNumber:1,pageSize:10});
+	});
+	
+	//重置按钮
+	$("#btn_reset").click(function() {
+		$("input[r=reset]").val("");
+	});
+	
+   // 绑定键盘按下事件(回车键查询) 
+   $(document).keypress(function(e) {  
+    // 回车键事件  
+       if(e.which == 13) {  
+    	   $("#btn_query").click();
+       }  
+   });
+   
+	
+   $("#btn_edit").click(function (e) {
+	  var rows=$('#table_list').bootstrapTable('getSelections');
+	  if(rows.length==0){
+		  bootbox.alert("请先选择记录")
+	  }else{
+         window.location.href = "./image_add.html?id="+iframe+"&row="+encodeURI(JSON.stringify(rows[0]));
+	  }
+   }) 
+   $("#btn_add").click(function (e) {
+	   window.location.href = "./image_add.html?id="+iframe;
+   }) 
+	
+})
+
+
+</script>
+  
+  
+<body>
+    <div class="panel-body" style="padding-bottom:0px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form id="formSearch" class="form-horizontal">
+                    <div class="form-group" style="margin-top:15px">
+                        <label class="control-label col-sm-1" for="status">状态</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="status">
+                               <option value="">请选择</option>
+                               <option value="normal">正常</option>
+                               <option value="stop">停用</option>
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-1" for="type">类型</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="type">
+                               <option value="">请选择</option>
+                               <option value="scroll">滚动图片</option>
+                               <option value="partner">合作商</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4" style="text-align:left;">
+                            <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>       
+
+        <div id="toolbar" class="btn-group">
+            <button id="btn_add" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+            </button>
+            <button id="btn_edit" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>详细
+            </button>
+        </div>
+        <table id="table_list" style="table-layout:fixed;word-break:break-all; word-wrap:break-all;"></table>
+    </div>
+</body>
+</html>

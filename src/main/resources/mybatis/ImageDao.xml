@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ImageDao">
+    <update id="update" parameterType="com.example.demo.domain.Image" >
+	    update image set updatetime=now(),updateuser=#{updateuser}
+		 <if test="status!=null and status!=''">
+		 	, status=#{status}
+		 </if>
+		 where id=#{id}
+	</update>
+	
+	<insert id="insert" parameterType="com.example.demo.domain.Image" keyProperty="id" useGeneratedKeys="true">
+	     insert into image(type,desc,path,status,createtime,createuser)  
+	     VALUES (#{type},#{desc},#{path},#{status},now(),#{createuser})
+	 </insert>
+	 
+	  <select id="findByPage" parameterType="com.example.demo.domain.Image" resultType="com.example.demo.domain.Image">
+        SELECT t.* FROM image t where 1=1
+         <if test="type!=null and type!=''">
+		 	and type=#{type}
+		 </if>
+		 <if test="status!=null and status!=''">
+		 	and status=#{status}
+		 </if>
+		 <if test="id!=null">
+		 	and id=#{id}
+		 </if>
+     </select>
+     
+</mapper>
