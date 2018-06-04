@@ -11,7 +11,7 @@ public class Image extends Base implements Serializable{
 	private static final long serialVersionUID = -2872483321858599041L;
 	private Integer id;
 	private String type;
-	private String desc;
+	private String content;
 	private String status;
 	private String path;
 	private Date createtime;
@@ -30,11 +30,13 @@ public class Image extends Base implements Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
-	public String getDesc() {
-		return desc;
+	
+	
+	public String getContent() {
+		return content;
 	}
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setContent(String content) {
+		this.content = content;
 	}
 	public String getStatus() {
 		return status;

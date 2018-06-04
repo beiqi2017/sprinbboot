@@ -45,7 +45,7 @@ public class WebsiteServiceImpl implements WebsiteService{
 		newsDao.insert(news);
 	}
 	
-	public void addImage(JSONObject parm, MultipartFile multipartFile, HttpSession session) throws Exception {
+	public void addImage(Image image, MultipartFile multipartFile, HttpSession session) throws Exception {
 
 		String root_fileName = multipartFile.getOriginalFilename();
 		String contentType = multipartFile.getContentType();
@@ -53,7 +53,6 @@ public class WebsiteServiceImpl implements WebsiteService{
 		log.info("图片保存路径={}", location);
 		String file_name = ImageUtil.saveImg(multipartFile, location);
 		
-		Image image = JSON.parseObject(parm.toJSONString(), Image.class);
 		String username = (String) session.getAttribute("user");
 		image.setPath(file_name);
 		image.setStatus("normal");

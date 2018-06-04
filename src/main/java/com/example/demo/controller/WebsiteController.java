@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.domain.Image;
 import com.example.demo.service.WebsiteService;
 
 @Controller 
@@ -57,10 +58,10 @@ public class WebsiteController {
 		return result;
 	};
 	
-	@RequestMapping(value = "/addImage", method = RequestMethod.POST)
+	@RequestMapping(value = "/addImage")
 	@ResponseBody
-	public Map<String,Object> addImage(@RequestBody JSONObject params,@RequestParam("editormd-image-file") MultipartFile multipartFile,HttpSession session) {
-		log.info("params:{}",params);
+	public Map<String,Object> addImage(Image image,@RequestParam("uploadFile") MultipartFile multipartFile,HttpSession session) {
+		log.info("params:{}",JSONObject.toJSONString(image));
 		HashMap<String,Object> result=new HashMap<String,Object>();
 		try {
 			if (multipartFile.isEmpty() || StringUtils.isEmpty(multipartFile.getOriginalFilename())) {
@@ -70,9 +71,10 @@ public class WebsiteController {
 		    if (!contentType.contains("")) {
 		        throw new Exception();
 		    }
-			websiteService.addImage(params,multipartFile,session);
+			websiteService.addImage(image,multipartFile,session);
 			result.put("success", true);
 		} catch (Exception e) {
+			log.error("上传文件异常：",e);
 			result.put("success", false);
 			result.put("msg", "新增失败");
 		}

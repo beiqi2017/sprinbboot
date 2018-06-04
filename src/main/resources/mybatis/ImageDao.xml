@@ -11,8 +11,8 @@
 	</update>
 	
 	<insert id="insert" parameterType="com.example.demo.domain.Image" keyProperty="id" useGeneratedKeys="true">
-	     insert into image(type,desc,path,status,createtime,createuser)  
-	     VALUES (#{type},#{desc},#{path},#{status},now(),#{createuser})
+	     insert into image(type,content,path,status,createtime,createuser)  
+	     VALUES (#{type},#{content},#{path},#{status},now(),#{createuser})
 	 </insert>
 	 
 	  <select id="findByPage" parameterType="com.example.demo.domain.Image" resultType="com.example.demo.domain.Image">

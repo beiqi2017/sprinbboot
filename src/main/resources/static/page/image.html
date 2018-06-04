@@ -64,6 +64,20 @@ $(function() {
 		    return "<button onclick=upStatus('"+row.id+"','"+text+"') type='button' class='btn btn-primary'>"+text+"</button>";
 		}
 	};
+	
+	var formatterType=function(value,row,index){
+		var result="";
+			switch (value) {
+				case "scroll":
+					result="滚动图片";
+					break;
+				case "partner":
+					result="合作商";
+					break;
+			}
+		return result;
+	}
+	
 	var formatterStatus=function(value,row,index){
 		var result="";
 			switch (value) {
@@ -119,24 +133,25 @@ $(function() {
 		}, {
 			field : 'type',
 			title : '类型',
-			width:50
+			formatter:formatterType,
+			width:100
 		},{
-			field : 'desc',
+			field : 'content',
 			title : '描述',
 			width:150
 		}, {
 			field : 'path',
 			title : '文件路径',
-			width:100
+			width:350
 		},{
 			field : 'status',
 			title : '状态',
 			formatter:formatterStatus,
-			width:100
+			width:50
 		},{
 			field : 'createtime',
 			title : '创建时间',
-			width:100
+			width:180
 		},{
 			field : 'createuser',
 			title : '创建人',
@@ -144,7 +159,7 @@ $(function() {
 		},{
 			field : 'updatetime',
 			title : '更新时间',
-			width:100
+			width:180
 		},{
 			field : 'updateuser',
 			title : '更新人',
@@ -167,7 +182,7 @@ $(function() {
 	
 	//重置按钮
 	$("#btn_reset").click(function() {
-		$("input[r=reset]").val("");
+		$("input,select").val("");
 	});
 	
    // 绑定键盘按下事件(回车键查询) 
@@ -221,7 +236,8 @@ $(function() {
                             </select>
                         </div>
                         <div class="col-sm-4" style="text-align:left;">
-                            <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
+                            <button type="button" id="btn_reset" class="btn btn-primary">清空</button>
+                            <button type="button" style="margin-left:10px" id="btn_query" class="btn btn-primary">查询</button>
                         </div>
                     </div>
                 </form>
