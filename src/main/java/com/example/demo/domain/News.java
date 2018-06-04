@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class News extends Base implements Serializable{
 	
@@ -18,10 +19,7 @@ public class News extends Base implements Serializable{
 	private String title;
 	private String content;
 	private String status;
-	
-	@JSONField(format="yyyyMMdd")
 	private Date createtime;
-	
 	private String createuser;
 	private Date updatetime;
 	private String updateuser;
@@ -55,6 +53,7 @@ public class News extends Base implements Serializable{
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")  
 	public Date getCreatetime() {
 		return createtime;
 	}
@@ -67,6 +66,7 @@ public class News extends Base implements Serializable{
 	public void setCreateuser(String createuser) {
 		this.createuser = createuser;
 	}
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")  
 	public Date getUpdatetime() {
 		return updatetime;
 	}

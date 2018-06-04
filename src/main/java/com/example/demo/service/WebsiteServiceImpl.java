@@ -65,6 +65,7 @@ public class WebsiteServiceImpl implements WebsiteService{
 		News news=JSON.parseObject(parm.toJSONString(), News.class);
 		String username=(String) session.getAttribute("user");
 		news.setUpdateuser(username);
+		news.setStatus("stop");
 		newsDao.update(news);
 	}
 	
@@ -72,6 +73,7 @@ public class WebsiteServiceImpl implements WebsiteService{
 		Image image=JSON.parseObject(parm.toJSONString(), Image.class);
 		String username=(String) session.getAttribute("user");
 		image.setUpdateuser(username);
+		image.setStatus("stop");
 		imageDao.update(image);
 	}
 
