@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -61,6 +63,7 @@ public class UserServiceImpl implements UserService{
 		}
 
 	@Override
+	@Cacheable(key="'user_menu_'+#uid", value = "userCache")
 	public List<Module> getMenu(String uid) {
 		// TODO Auto-generated method stub
 		List<Module> result= moduleDao.menu("menu");
@@ -105,7 +108,7 @@ public class UserServiceImpl implements UserService{
 		 return map;
     }
 	
-	
+	@Cacheable(key="'user_tree_'+#rid", value = "userCache")
 	public List<Map<String,Object>> getTree(Integer rid){
 		List<Map<String,Object>> result =new ArrayList<Map<String,Object>>();
 		
@@ -153,6 +156,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Transactional
+	@CacheEvict(allEntries=true, value="userCache")
 	public void updateTree(JSONObject parm) {
 		Integer rid=parm.getInteger("rid");
 		roleDao.delete(rid);
@@ -176,7 +180,7 @@ public class UserServiceImpl implements UserService{
 		roleDao.add(role);
 	}
 	
-	
+	@CacheEvict(allEntries=true, value="userCache")
 	public void upStatus(JSONObject parm) {
 		User user=new User();
 		user.setUid(parm.getInteger("id"));
@@ -198,6 +202,7 @@ public class UserServiceImpl implements UserService{
     };
     
     @Transactional
+    @CacheEvict(allEntries=true, value="userCache")
     public void updateUser(JSONObject parm) {
     	User user=JSON.parseObject(parm.toJSONString(), User.class);
     	userMapper.upRole(user);

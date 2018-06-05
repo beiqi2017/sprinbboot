@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +39,7 @@ public class WebsiteServiceImpl implements WebsiteService{
 	@Autowired
     private ImageDao imageDao;
 
+	@CacheEvict(allEntries=true,value="userCache")
 	public void addNews(JSONObject parm,HttpSession session) {
 		News news=JSON.parseObject(parm.toJSONString(), News.class);
 		String username=(String) session.getAttribute("user");
@@ -44,7 +47,7 @@ public class WebsiteServiceImpl implements WebsiteService{
 		news.setCreateuser(username);
 		newsDao.insert(news);
 	}
-	
+	@CacheEvict(allEntries=true, value="userCache")
 	public void addImage(Image image, MultipartFile multipartFile, HttpSession session) throws Exception {
 
 		String root_fileName = multipartFile.getOriginalFilename();
@@ -61,6 +64,7 @@ public class WebsiteServiceImpl implements WebsiteService{
 
 	}
 	
+	@CacheEvict(allEntries=true, value="userCache")
 	public void updateNews(JSONObject parm,HttpSession session) {
 		News news=JSON.parseObject(parm.toJSONString(), News.class);
 		String username=(String) session.getAttribute("user");
@@ -69,6 +73,7 @@ public class WebsiteServiceImpl implements WebsiteService{
 		newsDao.update(news);
 	}
 	
+	@CacheEvict(allEntries=true, value="userCache")
 	public void updateImage(JSONObject parm,HttpSession session) {
 		Image image=JSON.parseObject(parm.toJSONString(), Image.class);
 		String username=(String) session.getAttribute("user");
@@ -77,6 +82,7 @@ public class WebsiteServiceImpl implements WebsiteService{
 		imageDao.update(image);
 	}
 
+	@Cacheable(key="'user_news_'+#params", value = "userCache")
     public Map<String,Object> PageNews(String params) {
 		 JSONObject jsonObject = JSONObject.parseObject(params);
 	     // 当前页
@@ -95,6 +101,7 @@ public class WebsiteServiceImpl implements WebsiteService{
 		return map;
     }
 	
+	@Cacheable(key="'user_image_'+#params", value = "userCache")
     public Map<String,Object> PageImage(String params) {
 		JSONObject jsonObject = JSONObject.parseObject(params);
 	     // 当前页
