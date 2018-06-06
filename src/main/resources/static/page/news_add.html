@@ -31,6 +31,13 @@ function returnList(){
 	window.location.href="./news.html?id="+iframe; 
 };
 
+function view(){
+	sessionStorage.title=$("#title").val();
+	sessionStorage.content=$('#summernote').summernote('code');
+	window.open("./main_news.html","_blank"); 
+};
+
+
 function add() {
 	$("form").bootstrapValidator('validate');//提交验证
 	if ($("form").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
@@ -162,7 +169,8 @@ $(function() {
 				<div class="form-group"></div>
 				<div class="form-group">
 					<div class="col-sm-offset-4 col-sm-8">
-						<button type="button" id="addbtn" class="btn btn-primary" onclick=add() style="margin-right: 30px;">保存</button>
+						<button type="button" id="addbtn" class="btn btn-primary" onclick=add()>保存</button>
+						<button type="button" class="btn btn-primary" onclick=view()>预览</button>
 						<button type="button" class="btn btn-primary" onclick=returnList()>返回</button>
 					</div>
 				</div>
