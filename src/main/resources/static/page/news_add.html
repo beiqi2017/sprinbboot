@@ -34,7 +34,11 @@ function returnList(){
 function view(){
 	sessionStorage.title=$("#title").val();
 	sessionStorage.content=$('#summernote').summernote('code');
-	window.open("./main_news.html","_blank"); 
+	if(navigator.userAgent.match(/mobile/i)) { 
+		window.open("./mobile_news.html","_blank"); 
+    }else{
+    	window.open("./main_news.html","_blank"); 
+    }
 };
 
 
