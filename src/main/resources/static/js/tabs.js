@@ -7,10 +7,10 @@
      if(exists){
          $("#tab_a_"+tabName).click();
      } else {
-         $("#tablist").append('<li id="tab_li_'+tabName+'"><a href="#tab_content_'+tabName+'" data-toggle="tab" id="tab_a_'+tabName+'">'+tabTitle+'<span class="glyphicon glyphicon-remove" onclick="closeTab(this);"></span></a></li>');
+    	 var id="iframe_"+tabName;
+         $("#tablist").append('<li id="tab_li_'+tabName+'"><a href="#tab_content_'+tabName+'" data-toggle="tab" id="tab_a_'+tabName+'">'+tabTitle+'<span class="glyphicon glyphicon-remove" onclick="closeTab(this,\''+id+'\');"></span></a></li>');
          iframeHeight =$("#home").outerHeight();
-         var id="iframe_"+tabName;
-         var content = '<iframe id="'+id+'" src="../' +tabUrl+"?id="+id+ '" style="width:100%;margin: 0;padding: 0;" frameborder="0" scrolling="no" onload="javascript:iframeAutoHeight(this.id);" ></iframe>';
+         var content = '<iframe id="'+id+'" name="'+id+'" src="../' +tabUrl+"?id="+id+ '" style="width:100%;margin: 0;padding: 0;" frameborder="0" scrolling="no" onload="javascript:iframeAutoHeight(this.id);" ></iframe>';
          $("#tab-content").append('<div id="tab_content_'+tabName+'" style="height: '+iframeHeight+'px;overflow: auto;" role="tabpanel" class="tab-pane">'+content+'</div>');
          $("#tab_a_"+tabName).click();
      }
@@ -21,8 +21,10 @@
   * 关闭标签页
   * @param button
   */
- function closeTab (button) {
-      
+ function closeTab (button,iframe_id) {
+	 if(document.getElementById(iframe_id).contentWindow.ws){
+		 document.getElementById(iframe_id).contentWindow.ws.close(); 
+	 }
      //通过该button找到对应li标签的id
      var li_id = $(button).parent().parent().attr('id');
      var id = li_id.replace("tab_li_","");
