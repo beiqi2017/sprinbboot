@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>网络聊天</title>
+<!-- Bootstrap -->
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet">
+<link href="../plugin/bootstrap-treeview.min.css" rel="stylesheet" />
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../plugin/bootbox.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js"></script>
+<script src="../plugin/bootstrap-treeview.min.js"></script> 
+</head>
+<script type="text/javascript">
+
+function isJsonFormat( str ) {  
+    try {  
+        $.parseJSON(str);  
+    } catch (e) {  
+        return false;  
+    }  
+    return true;  
+}  
+
+$(function() {
+	
+	       ws = new WebSocket("wss://localhost/myWeb/myHandler")
+	      
+	      //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+	       window.onbeforeunload = function(){
+	        	ws.close();
+	       }
+
+	       ws.onopen = function () {
+	        console.log("onpen");
+	         ws.send("{}");
+	       }
+	       ws.onclose = function () {
+	        console.log("onclose");
+	       }
+	       ws.onerror = function (e) {  
+	            console.log(e);  
+	        };  
+            
+	      ws.onmessage = function (msg) {
+	        console.log(msg.data);
+	    	if(isJsonFormat(msg.data)){
+	    	    var data =JSON.parse(msg.data)
+	    		$("#content").append("<h4>"+data.user+"&nbsp;&nbsp;<small>"+data.time+"</small></h4>")
+				$("#content").append('<div class="alert alert-info" role="alert">'+data.info+'</div>')
+	    	}
+		    
+	       }
+	      
+	      $.ajax({
+	          type: "get",
+	          url: "../websocket/users",
+	          dataType: "json",
+	          success: function (result) {
+	              $('#tree').treeview({
+	                  data: result,         // 数据源
+	                  showCheckbox: false,   //是否显示复选框
+	                  onNodeChecked: function (event,node) {
+	                	  
+	                  }
+	              });
+	          },
+	          error: function () {
+	          	console.log("树形结构加载失败！")
+	          }
+	      });
+	      
+	      $("#send").click(function() {
+	    	  
+	    	  var parm = new Object();
+	    	  parm.info = $("#info").val();
+	    	  $.ajax({
+	    			type : "POST",
+	    			url : "../websocket/info",
+	    			dataType : "json",
+	    			contentType : "application/json",
+	    			data : JSON.stringify(parm),
+	    			async : false,
+	    			success : function(data) {
+	    				if (data.success) {
+	    				}else{
+	    				} 
+	    			}
+	    		});
+	    	  
+	  	});
+})
+</script>
+<body>
+<div class="container-fluid">
+  <div class="row">
+     <div class="col-xs-3 col-md-3" style="height:0px;padding-bottom:52%;border-right: 1px solid #ddd;padding-left:0px;padding-right:0px;">
+       
+       <div class="panel panel-primary" style="height: 0px;">
+         <div class="panel-heading text-center">在线用户</div>
+         <div class="panel-body" style="padding:0px;height:100%;">
+              <div id="tree"></div>
+         </div>
+       </div>
+     
+     </div>
+     
+     <div class="col-xs-9 col-md-9" style="height:0px;padding-bottom:52%;">
+          <div class="col-sm-11" id="content" style="margin:10px 0px;border: 1px solid #ddd;height:400px;overflow-y: auto;"></div>
+          <div class="form-horizontal">
+			    <div class="row">
+					 <div class="col-sm-10">
+						  <input type="text" class="form-control" id="info" placeholder="消息">
+					 </div>
+					 <button type="submit" id="send" class="btn btn-default col-sm-1">发送</button>
+			    </div>
+		  </div>
+	 </div>
+	 
+  </div>
+</div>
+
+
+</body>
+</html>
