@@ -105,7 +105,9 @@ public class MyHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         System.out.println("连接已关闭：" + status);
-        users.remove(getClientId(session));
+        String userId = getClientId(session);
+        System.out.println(userId);
+        users.remove(userId);
     }
 
     @Override
