@@ -167,6 +167,7 @@ public class ShiroConfiguration {
 	@Bean
 	public DefaultWebSessionManager sessionManager() {
 		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+		sessionManager.setSessionIdUrlRewritingEnabled(false); 
 		sessionManager.setSessionDAO(redisSessionDAO());
 		return sessionManager;
 	}
