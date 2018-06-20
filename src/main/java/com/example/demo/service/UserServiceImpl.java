@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.RealmSecurityManager;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.dao.ModuleDao;
@@ -20,6 +23,7 @@ import com.example.demo.domain.Module;
 import com.example.demo.domain.Right;
 import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
+import com.example.demo.shiro.AuthRealm;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -68,7 +72,7 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		List<Module> result= moduleDao.menu("menu");
 		User user=userMapper.getUser(uid);
-		for(int i=0;i<result.size();i++) {
+		for(int i=0;i<result.size()&&user!=null;i++) {
 			Module module=result.get(i);
 			List<Module> result1= moduleDao.subMenu(module.getMid(),user.getUid());
 			if(result1.size()>0) {
@@ -170,6 +174,14 @@ public class UserServiceImpl implements UserService{
 				list.add(map);
 			}
 			roleDao.insert(list);
+			User user=new User();
+			user.setRid(rid);
+			user.setPage(1);
+			user.setRows(9999);
+			List<User> users=userMapper.list(user);
+			for(User u:users) {
+				clearPerm(u.getUsername());
+			}
 		}
 	}
 	
@@ -186,11 +198,13 @@ public class UserServiceImpl implements UserService{
 		user.setUid(parm.getInteger("id"));
 		String status=parm.getString("status");
 		if("恢复".equals(status)) {
-			user.setStatus("noraml");
+			user.setStatus("normal");
 		}else {
 			user.setStatus("stop");
 		}
 		userMapper.update(user);
+		user=userMapper.findById(user);
+		clearPerm(user.getUsername());
 	}
 	
 	@Transactional
@@ -207,6 +221,23 @@ public class UserServiceImpl implements UserService{
     	User user=JSON.parseObject(parm.toJSONString(), User.class);
     	userMapper.upRole(user);
     	userMapper.update(user);
+    	user=userMapper.findById(user);
+    	clearPerm(user.getUsername());
     };   
+    
+    
+    private void clearPerm(String username) {
+        
+        Subject subject = SecurityUtils.getSubject();   
+        String realmName = subject.getPrincipals().getRealmNames().iterator().next();   
+        //第一个参数为用户名,第二个参数为realmName,test想要操作权限的用户   
+        SimplePrincipalCollection principals = new SimplePrincipalCollection(username,realmName);   
+        subject.runAs(principals);   
+        
+        RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();    
+		AuthRealm realm = (AuthRealm)rsm.getRealms().iterator().next();  
+		realm.getAuthorizationCache().remove(subject.getPrincipals());   
+        subject.releaseRunAs();  
+    }
 	 
 }

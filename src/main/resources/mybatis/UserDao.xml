@@ -47,6 +47,10 @@
         SELECT u.* FROM user u 
     </select>
     
+     <select id="findById" parameterType="com.example.demo.domain.User" resultType="com.example.demo.domain.User">
+        SELECT u.* FROM user u where u.uid=#{uid}
+    </select>
+    
       <select id="count" parameterType="com.example.demo.domain.User" resultType="int">
 		 select count(1) FROM ( SELECT u.*,md.rname as rname,md.rid as rid FROM user u left join 
           (select r.*,ur.uid from role r, user_role ur where r.rid=ur.rid) md 

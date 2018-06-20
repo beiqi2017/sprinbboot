@@ -28,4 +28,6 @@ public interface UserDao {
 	 void add(User user);
 	 
 	 void addRole(User user);
+	 
+	 User findById(User user);
 }

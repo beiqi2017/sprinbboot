@@ -57,12 +57,12 @@ public class SocketController {
     	Map<String, WebSocketSession> users=MyHandler.getUsers();
     	 Set<String> clientIds = users.keySet();
     	 for (String clientId : clientIds) {
-    		 if(!username.equals(clientId)) {
+    		// if(!username.equals(clientId)) {
     			 HashMap<String,Object> root=new HashMap<String,Object>();
     			 root.put("id", clientId);
     			 root.put("text", clientId);
     			 result.add(root);
-    		 }
+    		// }
     	 }
 		return result;
     }
