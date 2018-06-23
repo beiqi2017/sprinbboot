@@ -11,12 +11,9 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.crazycake.shiro.RedisCache;
-import org.crazycake.shiro.RedisCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import com.example.demo.domain.Module;
@@ -87,15 +84,4 @@ public class AuthRealm extends AuthorizingRealm{
       return getClass().getName();
     }
     
-    
-    public void clearAuth(String username) {
-    	 Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();  
-    	    if (cache != null) {  
-    	        for (Object key : cache.keys()) {  
-    	            System.out.println(key+":"+key.toString());  
-    	            cache.remove(key);  
-    	        }  
-    	    }  
-    }
-
 }
