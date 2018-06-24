@@ -28,6 +28,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>  
+                <exclusion>  
+                    <groupId>org.springframework.boot</groupId>  
+                    <artifactId>spring-boot-starter-logging</artifactId>  
+                </exclusion>  
+            </exclusions> 
 		</dependency>
 
 		<dependency>
@@ -73,12 +79,24 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j</artifactId>
+			<version>1.2.4.RELEASE</version>
+		</dependency> 
+		
+		<dependency>
            <groupId>org.springframework.boot</groupId>
            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <dependency>
            <groupId>org.springframework.session</groupId>
            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
+        
+        <dependency>    
+           <groupId>org.springframework.boot</groupId>  
+           <artifactId>spring-boot-starter-redis</artifactId>  
+           <version>1.4.3.RELEASE</version>  
         </dependency>
 	</dependencies>
 
