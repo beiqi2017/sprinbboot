@@ -98,6 +98,17 @@
            <artifactId>spring-boot-starter-redis</artifactId>  
            <version>1.4.3.RELEASE</version>  
         </dependency>
+        
+        <dependency>
+            <groupId>com.dangdang</groupId>
+            <artifactId>sharding-jdbc-core</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dangdang</groupId>
+            <artifactId>sharding-jdbc-self-id-generator</artifactId>
+            <version>1.4.2</version>
+        </dependency>
 	</dependencies>
 
 	<build>
