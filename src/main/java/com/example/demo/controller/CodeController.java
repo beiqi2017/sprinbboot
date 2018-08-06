@@ -84,6 +84,7 @@ public class CodeController {
             // 将产生的四个随机数组合在一起。  
             randomCode.append(code); 
         } 
+        //23
         // 将四位数字的验证码保存到Session中。  
         HttpSession session = req.getSession(); 
         session.setAttribute("code", randomCode.toString()); 
